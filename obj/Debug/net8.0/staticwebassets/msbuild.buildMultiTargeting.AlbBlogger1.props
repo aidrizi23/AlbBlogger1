@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/AlbBlogger1.props" />
+</Project>
