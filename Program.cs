@@ -43,9 +43,13 @@
 //
 // app.Run();
 
+using AlbBlogger1.Areas;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AlbBlogger1.Data;
+using AlbBlogger1.Repositories;
+using AlbBlogger1.Services;
+using NestAlbania.Services.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,16 +64,24 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddScoped<UserManager<ApplicationUser>>();
-builder.Services.AddScoped<SignInManager<ApplicationUser>>();
+// builder.Services.AddScoped<UserManager<ApplicationUser>>();
+// builder.Services.AddScoped<SignInManager<ApplicationUser>>();
 
 
 builder.Services.AddControllersWithViews();
 
+#region Scoped
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<UserRoleRepository, UserRoleRepository>();
+builder.Services.AddScoped<RoleRepository, RoleRepository>();
+#endregion
 
-
-
-
+#region Transient
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserRoleService, UserRoleService>();
+builder.Services.AddTransient<IRoleService, RoleService>();
+builder.Services.AddTransient<IFileHandlerService, FileHandlerService>();
+#endregion
 
 
 var app = builder.Build();
