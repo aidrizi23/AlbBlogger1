@@ -25,18 +25,22 @@
 
     <ItemGroup>
       <Compile Remove="Migrations\**" />
+      <Compile Remove="Migrations2\**" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Remove="Migrations\**" />
+      <EmbeddedResource Remove="Migrations2\**" />
     </ItemGroup>
 
     <ItemGroup>
       <Content Remove="Migrations\**" />
+      <Content Remove="Migrations2\**" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Migrations\**" />
+      <None Remove="Migrations2\**" />
     </ItemGroup>
 	<ItemGroup>
 		<Compile Include="Migrations\**\*.cs" />
