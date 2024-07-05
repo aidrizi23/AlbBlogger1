@@ -1,17 +1,91 @@
+@* *@
+@* *@
+@* @model LoginViewModel *@
+@* @{ *@
+@* ViewData["Title"] = "Login"; *@
+@* Layout = "~/Views/Shared/_Layout.cshtml"; *@
+@* } *@
+@* <h1>Login</h1> *@
+@* <form asp-controller="Account" asp-action="Login" method="post"> *@
+@*     <label for="inputEmail">Email</label> *@
+@*     <input type="email" id="inputEmail" name="Email" required autofocus /> *@
+@* *@
+@*     <label for="inputPassword">Password</label> *@
+@*     <input type="password" id="inputPassword" name="Password" required /> *@
+@* *@
+@*     <button type="submit">Login</button> *@
+@* </form> *@
 
 
 @model LoginViewModel
 @{
-ViewData["Title"] = "Login";
-Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<h1>Login</h1>
-<form asp-controller="Account" asp-action="Login" method="post">
-    <label for="inputEmail">Email</label>
-    <input type="email" id="inputEmail" name="Email" required autofocus />
 
-    <label for="inputPassword">Password</label>
-    <input type="password" id="inputPassword" name="Password" required />
+<style>
+    /* Modern styles for the form */
+    form {
+        max-width: 350px;
+        margin: 0 auto;
+        padding: 30px;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        font-weight: 500;
+        margin-bottom: 6px;
+        color: #555;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<h1>Login</h1>
+
+<form asp-controller="Account" asp-action="Login" method="post">
+    <div>
+        <label for="inputEmail">Email</label>
+        <input type="email" id="inputEmail" name="Email" required autofocus />
+    </div>
+
+    <div>
+        <label for="inputPassword">Password</label>
+        <input type="password" id="inputPassword" name="Password" required />
+    </div>
 
     <button type="submit">Login</button>
 </form>
