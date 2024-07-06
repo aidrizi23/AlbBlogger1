@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AlbBlogger1.Data;
 
@@ -15,7 +16,9 @@ public class Post : BaseEntity
     public int Likes { get; set; }
     public int Views { get; set; }
     public string Image { get; set; }
-
-
     
+    [ForeignKey("UserId")]
+    public string UserId { get; set; }
+    public ApplicationUser User;
+
 }
