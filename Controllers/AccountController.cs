@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 
 [Authorize]
@@ -35,7 +36,6 @@ using Microsoft.AspNetCore.Mvc;
         }
 
 
-        
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -64,6 +64,7 @@ using Microsoft.AspNetCore.Mvc;
         }
 
 
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> LogOut()
@@ -87,23 +88,42 @@ using Microsoft.AspNetCore.Mvc;
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string? returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            var user = new ApplicationUser
-            {
-                UserName = model.Email,
-                Email = model.Email
-            };
-            user.Id = Guid.NewGuid().ToString();
-            var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return View(model);
 
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Id = Guid.NewGuid().ToString(), // Ensure Id is set
+                    LockoutEnabled = false,
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User created a new account with password.");
+
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    _logger.LogInformation("User created a new account with password.");
+
+                   return RedirectToAction("Index", "Home"); // Redirect to returnUrl or default homepage
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            // If model state is not valid or registration fails, return to register view with errors
+            return View(model);
         }
+
+
 
 
     }

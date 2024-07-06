@@ -64,8 +64,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-// builder.Services.AddScoped<UserManager<ApplicationUser>>();
-// builder.Services.AddScoped<SignInManager<ApplicationUser>>();
+builder.Services.AddScoped<UserManager<ApplicationUser>>();
+builder.Services.AddScoped<SignInManager<ApplicationUser>>();
 
 
 builder.Services.AddControllersWithViews();
