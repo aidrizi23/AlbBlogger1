@@ -15,7 +15,7 @@ public class Post : BaseEntity
     public int Likes { get; set; }
     public int Views { get; set; }
     public string Image { get; set; }
-    public bool IsPublished { get; set; }
+
 
     
 }

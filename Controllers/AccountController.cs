@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using AlbBlogger1.Controllers;
 using AlbBlogger1.Data;
 using AlbBlogger1.Models;
+using AlbBlogger1.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -15,14 +16,17 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
+        private readonly IUserRoleService _userRoleService;
 
         public AccountController(UserManager<ApplicationUser> userManager, 
                                 SignInManager<ApplicationUser> signInManager, 
-                                ILogger<AccountController> logger)
+                                ILogger<AccountController> logger,
+                                IUserRoleService userRoleService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _userRoleService = userRoleService;
         }
 
         [HttpGet]
@@ -91,7 +95,8 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-
+            
+            
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
@@ -102,9 +107,18 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
                     LockoutEnabled = false,
                     EmailConfirmed = true,
                 };
-
+                    
                 var result = await _userManager.CreateAsync(user, model.Password);
-
+                
+                
+                // TEK KJO METODE, DO TE BEJME QE TE KENE TE GJITHE KETA ROLIN NORMAL USER
+                var userRole = new ApplicationUserRole()
+                {
+                    RoleId = "a14bs9c0-aa65-4af8-bd17-00bd9344e575",
+                    UserId = user.Id
+                };
+                await _userRoleService.CreateAsync(userRole); // krijojme automatikisht user role
+                
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
