@@ -100,6 +100,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
                     Email = model.Email,
                     Id = Guid.NewGuid().ToString(), // Ensure Id is set
                     LockoutEnabled = false,
+                    EmailConfirmed = true,
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

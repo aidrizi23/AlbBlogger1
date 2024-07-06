@@ -54,22 +54,19 @@ using NestAlbania.Services.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                       throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-// Register UserManager and SignInManager for ApplicationUser
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+builder.Services.AddControllersWithViews();
+
+
+
 
 builder.Services.AddScoped<UserManager<ApplicationUser>>();
 builder.Services.AddScoped<SignInManager<ApplicationUser>>();
-
-
-builder.Services.AddControllersWithViews();
-
 #region Scoped
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserRoleRepository, UserRoleRepository>();
@@ -84,6 +81,31 @@ builder.Services.AddTransient<IFileHandlerService, FileHandlerService>();
 #endregion
 
 
+// var app = builder.Build();
+//
+// // Configure the HTTP request pipeline.
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseMigrationsEndPoint();
+// }
+// else
+// {
+//     app.UseExceptionHandler("/Home/Error");
+//     app.UseHsts();
+// }
+//
+// app.UseHttpsRedirection();
+// app.UseStaticFiles();
+// app.UseRouting();
+// app.UseAuthorization();
+//
+// app.MapControllerRoute(
+//     name: "default",
+//     pattern: "{controller=Account}/{action=Register}/{id?}");
+// app.MapRazorPages();
+//
+// app.Run();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -94,17 +116,19 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Account}/{action=Register}/{id?}");
-app.MapRazorPages();
 
 app.Run();
