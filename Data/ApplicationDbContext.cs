@@ -15,6 +15,12 @@ namespace AlbBlogger1.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Post>()
+                .HasOne(p => p.User)
+                .WithMany(u => u.Posts)
+                .HasForeignKey(p => p.UserId);
+            
+            
             const string ADMIN_ID = "a18be9c0-aa65-4af8-bd17-00bd9344e575";
             const string ADMIN_ROLE_ID = "b18be9c0-aa65-4af8-bd17-00bd9344e576";
 

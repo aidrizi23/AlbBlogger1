@@ -65,12 +65,14 @@ builder.Services.AddControllersWithViews();
 
 
 
+
+#region Scoped
 builder.Services.AddScoped<UserManager<ApplicationUser>>();
 builder.Services.AddScoped<SignInManager<ApplicationUser>>();
-#region Scoped
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<RoleRepository, RoleRepository>();
+builder.Services.AddScoped<PostRepository, PostRepository>();
 #endregion
 
 #region Transient
@@ -78,33 +80,9 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IUserRoleService, UserRoleService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IFileHandlerService, FileHandlerService>();
+builder.Services.AddTransient<IPostService, PostService>();
 #endregion
 
-
-// var app = builder.Build();
-//
-// // Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
-// {
-//     app.UseMigrationsEndPoint();
-// }
-// else
-// {
-//     app.UseExceptionHandler("/Home/Error");
-//     app.UseHsts();
-// }
-//
-// app.UseHttpsRedirection();
-// app.UseStaticFiles();
-// app.UseRouting();
-// app.UseAuthorization();
-//
-// app.MapControllerRoute(
-//     name: "default",
-//     pattern: "{controller=Account}/{action=Register}/{id?}");
-// app.MapRazorPages();
-//
-// app.Run();
 
 var app = builder.Build();
 

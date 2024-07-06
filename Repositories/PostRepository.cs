@@ -1,6 +1,7 @@
 using System.Drawing.Printing;
 using AlbBlogger1.Data;
 using AlbBlogger1.Repositories.Pagination;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace AlbBlogger1.Repositories;
@@ -14,9 +15,32 @@ public class PostRepository : BaseRepository<Post>
         _applicationDbContext = applicationDbContext;
     }
 
-    public async Task<PaginatedList<Post>> GetAllPostsByUserId(string userId, int pageIndex = 1, int pageSize = 10)
+    public async Task<PaginatedList<Post>> GetAllPaginatedPostsByUserId(string userId, int pageIndex = 1, int pageSize = 10)
     {
         var posts = _applicationDbContext.Posts.AsNoTracking().Where(X => X.UserId == userId).AsQueryable();
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex , pageSize );
     }
+
+    public async Task LikePostByIdAsync(int id)
+    {
+        var post = await _applicationDbContext.Posts.FirstOrDefaultAsync(x => x.Id == id);
+        if (post != null)
+        {
+            post.Likes++;
+            _applicationDbContext.Posts.Update(post);
+            await _applicationDbContext.SaveChangesAsync();
+        }
+    }
+
+    public async Task ViewPostByIdAsync(int id)
+    {
+        var post = await _applicationDbContext.Posts.FirstOrDefaultAsync(x => x.Id == id);
+        if (post != null)
+        {
+            post.Views++;
+            _applicationDbContext.Posts.Update(post);
+            await _applicationDbContext.SaveChangesAsync();
+        }
+    }
+    
 }
