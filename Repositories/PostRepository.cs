@@ -43,4 +43,10 @@ public class PostRepository : BaseRepository<Post>
         }
     }
     
+    public async Task<PaginatedList<Post>> GetAllPaginatedPostAsync(int pageIndex = 1, int pageSize = 10)
+    {
+        var posts =  _applicationDbContext.Posts.AsNoTracking().AsQueryable();
+        return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
+    }
+    
 }

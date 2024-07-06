@@ -55,6 +55,11 @@ public class PostService : IPostService
     {
         await _postRepository.ViewPostByIdAsync(id);
     }
+
+    public async Task<PaginatedList<Post>> GetAllPaginatedPostsAsync(int pageIndex = 1, int pageSize = 10)
+    {
+        return await _postRepository.GetAllPaginatedPostAsync(pageIndex, pageSize);
+    }
 }
 
 
@@ -68,6 +73,6 @@ public interface IPostService
      Task<PaginatedList<Post>> GetAllPaginatedPostsByUserId(string userId);
      Task LikePostByIdAsync(int id);
      Task ViewPostByIdAsync(int id);
-
+     Task<PaginatedList<Post>> GetAllPaginatedPostsAsync(int pageIndex = 1, int pageSize = 10);
 
 }

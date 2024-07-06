@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using AlbBlogger1.Models;
 
 namespace AlbBlogger1.Data
 {
@@ -73,5 +74,6 @@ namespace AlbBlogger1.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
         public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
+        public DbSet<AlbBlogger1.Models.PostViewModel> PostViewModel { get; set; } = default!;
     }
 }
