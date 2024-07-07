@@ -38,6 +38,7 @@
     <ItemGroup>
       <Content Remove="Migrations\**" />
       <Content Remove="Migrations2\**" />
+      <Content Remove="Views\Post\Delete.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

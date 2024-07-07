@@ -45,8 +45,34 @@ public class PostRepository : BaseRepository<Post>
     
     public async Task<PaginatedList<Post>> GetAllPaginatedPostAsync(int pageIndex = 1, int pageSize = 10)
     {
-        var posts =  _applicationDbContext.Posts.AsNoTracking().AsQueryable();
+        var posts =  _applicationDbContext.Posts.AsQueryable();
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
     }
     
+    // ------------------------------ Filters ----------------------------
+    public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10)
+    {
+        var posts = _applicationDbContext.Posts.AsNoTracking().OrderByDescending(x => x.Likes).AsQueryable();
+        return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
+    }
+
+    public async Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10)
+    {
+        var posts = _applicationDbContext.Posts.AsNoTracking().OrderBy(x => x.Likes).AsQueryable();
+        return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
+    }
+    
+    public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestViews(int pageIndex = 1, int pageSize = 10)
+    {
+        var posts = _applicationDbContext.Posts.AsNoTracking().OrderByDescending(x => x.Views).AsQueryable();
+        return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
+    }
+
+    public async Task<PaginatedList<Post>> GetPaginatedPostsByLowestViews(int pageIndex = 1, int pageSize = 10)
+    {
+        var posts = _applicationDbContext.Posts.AsNoTracking().OrderBy(x => x.Views).AsQueryable();
+        return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
+    }
+    // -------------------------------------------------------------------------
+
 }

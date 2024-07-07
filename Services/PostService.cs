@@ -60,6 +60,26 @@ public class PostService : IPostService
     {
         return await _postRepository.GetAllPaginatedPostAsync(pageIndex, pageSize);
     }
+    
+    // ------------------------------- Filters ---------------------------
+    public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10)
+    {
+        return await _postRepository.GetPaginatedPostsByHighestLikes(pageIndex, pageSize);
+    } 
+    public async Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10)
+    {
+        return await _postRepository.GetPaginatedPostsByLowestLikes(pageIndex, pageSize);
+    }
+    public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestViews(int pageIndex = 1, int pageSize = 10)
+    {
+        return await _postRepository.GetPaginatedPostsByHighestViews(pageIndex, pageSize);
+    }    
+    public async Task<PaginatedList<Post>> GetPaginatedPostsByLowestViews(int pageIndex = 1, int pageSize = 10)
+    {
+        return await _postRepository.GetPaginatedPostsByLowestViews(pageIndex, pageSize);
+    }
+    
+    
 }
 
 
@@ -74,5 +94,9 @@ public interface IPostService
      Task LikePostByIdAsync(int id);
      Task ViewPostByIdAsync(int id);
      Task<PaginatedList<Post>> GetAllPaginatedPostsAsync(int pageIndex = 1, int pageSize = 10);
+     Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10);
+     Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10);
+     Task<PaginatedList<Post>> GetPaginatedPostsByHighestViews(int pageIndex = 1, int pageSize = 10);
+     Task<PaginatedList<Post>> GetPaginatedPostsByLowestViews(int pageIndex = 1, int pageSize = 10);
 
 }
