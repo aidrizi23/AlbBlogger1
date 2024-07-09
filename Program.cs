@@ -73,6 +73,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<RoleRepository, RoleRepository>();
 builder.Services.AddScoped<PostRepository, PostRepository>();
+builder.Services.AddScoped<LikeRepository, LikeRepository>();
 #endregion
 
 #region Transient
@@ -81,6 +82,7 @@ builder.Services.AddTransient<IUserRoleService, UserRoleService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IFileHandlerService, FileHandlerService>();
 builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<ILikeService, LikeService>();
 #endregion
 
 

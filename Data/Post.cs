@@ -14,12 +14,21 @@ public class Post : BaseEntity
     public List<string>? Tags { get; set; }
     // public List<Comment> Comments { get; set; }
     
-    public int Likes { get; set; }
+ 
     public int Views { get; set; }
     public string Image { get; set; }
     
     [ForeignKey("UserId")]
     public string UserId { get; set; }
     public ApplicationUser User;
+    
+    public ICollection<Like> Likes { get; set; }
+    public int LikeCount { get; set; }
+    
+    
+    public Post()
+    {
+        Likes = new List<Like>(); // Initialize Likes collection in the constructor
+    }
 
 }

@@ -12,12 +12,14 @@ public class PostController : Controller
     private readonly IPostService _postService;
     private readonly IUserService _userService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ILikeService _likeService;
 
-    public PostController(IPostService postService, IUserService userService, UserManager<ApplicationUser> userManager)
+    public PostController(IPostService postService, IUserService userService, UserManager<ApplicationUser> userManager, ILikeService likeService)
     {
         _postService = postService;
         _userService = userService;
         _userManager = userManager;
+        _likeService = likeService;
     }
 
     public async Task<IActionResult> Index(int pageIndex = 1)
@@ -82,7 +84,8 @@ public class PostController : Controller
                 Content = viewModel.Content,
                 PublishDate = DateTime.Now,
                 Tags = viewModel.Tags,
-                Likes = 0,
+                // Likes = 0,
+                Likes = new List<Like>(),
                 Views = 0,
                 Image = viewModel.Image,
                 UserId = userId,
@@ -97,52 +100,67 @@ public class PostController : Controller
     
     
     // --------------------------- FIlters ------------------------
-    public async Task<IActionResult> FilterByHighestLikes(int pageIndex = 1, int pageSize = 10)
-    {
-        var posts = await _postService.GetPaginatedPostsByHighestLikes(pageIndex, pageSize);
-
-        // Firstly, let's get the posts of the logged-in user
-        var user = await _userManager.GetUserAsync(User);
-        var userId = _userManager.GetUserId(User);
-
-        if (user != null)
-            // Filter posts by the logged-in user's ID
-            posts = new PaginatedList<Post>(
-                posts.Where(x => x.UserId == userId).ToList(),
-                posts.TotalCount,
-                pageIndex,
-                pageSize
-            );
-
-        return View("Index", posts);
-    }
+    // public async Task<IActionResult> FilterByHighestLikes(int pageIndex = 1, int pageSize = 10)
+    // {
+    //     var posts = await _postService.GetPaginatedPostsByHighestLikes(pageIndex, pageSize);
+    //
+    //     // Firstly, let's get the posts of the logged-in user
+    //     var user = await _userManager.GetUserAsync(User);
+    //     var userId = _userManager.GetUserId(User);
+    //
+    //     if (user != null)
+    //         // Filter posts by the logged-in user's ID
+    //         posts = new PaginatedList<Post>(
+    //             posts.Where(x => x.UserId == userId).ToList(),
+    //             posts.TotalCount,
+    //             pageIndex,
+    //             pageSize
+    //         );
+    //
+    //     return View("Index", posts);
+    // }
     // ---------------------------------------------------------------------
     
     
     // ------------------------ Likes And Views ----------------------------
-
     [HttpPost]
     public async Task<IActionResult> LikePost(int id)
     {
-        try
+        var post = await _postService.GetPostByIdAsync(id);
+        if (post == null)
         {
-            var post = await _postService.GetPostByIdAsync(id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-
-            await _postService.LikePostByIdAsync(id);
-
-            // Optionally, you can return updated post details if needed
-            return Json(new { success = true, likes = post.Likes + 1 });
+            return NotFound();
         }
-        catch (Exception ex)
+
+        var userId = _userManager.GetUserId(User);
+        if (string.IsNullOrEmpty(userId))
         {
-            // Log the exception or handle it appropriately
-            return StatusCode(500, new { success = false, message = "Failed to like the post." });
+            return Unauthorized();
         }
+
+        var existingLike = await _likeService.GetByPostAndUserAsync(id, userId);
+        if (existingLike != null)
+        {
+            // User has already liked this post
+            return BadRequest("You have already liked this post.");
+        }
+
+        // Create new Like
+        var like = new Like
+        {
+            UserId = userId,
+            PostId = post.Id
+        };
+
+        await _likeService.CreateAsync(like);
+
+        // Update post's like count (if needed)
+        post.Likes.Add(like); // Assuming Likes is a collection in Post model
+        await _postService.EditPostAsync(post);
+
+        return Json(new { success = true, likes = post.Likes.Count });
     }
+
 
 
 

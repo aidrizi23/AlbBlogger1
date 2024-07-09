@@ -47,10 +47,10 @@ public class PostService : IPostService
         return await _postRepository.GetAllPaginatedPostsByUserId(userId);
     }
 
-    public async Task LikePostByIdAsync(int id)
+    public async Task LikePostByIdAsync(int postId, string userId)
     {
-        await _postRepository.LikePostByIdAsync(id);
-    }
+        await _postRepository.LikePostByIdAsync(postId, userId);
+    } 
     public async Task ViewPostByIdAsync(int id)
     {
         await _postRepository.ViewPostByIdAsync(id);
@@ -62,14 +62,14 @@ public class PostService : IPostService
     }
     
     // ------------------------------- Filters ---------------------------
-    public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10)
-    {
-        return await _postRepository.GetPaginatedPostsByHighestLikes(pageIndex, pageSize);
-    } 
-    public async Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10)
-    {
-        return await _postRepository.GetPaginatedPostsByLowestLikes(pageIndex, pageSize);
-    }
+    // public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10)
+    // {
+    //     return await _postRepository.GetPaginatedPostsByHighestLikes(pageIndex, pageSize);
+    // } 
+    // public async Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10)
+    // {
+    //     return await _postRepository.GetPaginatedPostsByLowestLikes(pageIndex, pageSize);
+    // }
     public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestViews(int pageIndex = 1, int pageSize = 10)
     {
         return await _postRepository.GetPaginatedPostsByHighestViews(pageIndex, pageSize);
@@ -91,11 +91,11 @@ public interface IPostService
      Task DeletePostAsync(Post post);
      Task EditPostAsync(Post post);
      Task<PaginatedList<Post>> GetAllPaginatedPostsByUserId(string userId);
-     Task LikePostByIdAsync(int id);
+     Task LikePostByIdAsync(int postId, string userId);
      Task ViewPostByIdAsync(int id);
      Task<PaginatedList<Post>> GetAllPaginatedPostsAsync(int pageIndex = 1, int pageSize = 10);
-     Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10);
-     Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10);
+     // Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10);
+     // Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10);
      Task<PaginatedList<Post>> GetPaginatedPostsByHighestViews(int pageIndex = 1, int pageSize = 10);
      Task<PaginatedList<Post>> GetPaginatedPostsByLowestViews(int pageIndex = 1, int pageSize = 10);
 
