@@ -1,0 +1,37 @@
+@* $1$ @model AlbBlogger1.Data.Post #1# *@
+@* @using Microsoft.AspNetCore.Mvc.TagHelpers *@
+@* @model AlbBlogger1.Data.Post *@
+@* *@
+@* <h1>Delete</h1> *@
+@* *@
+@* <h3>Are you sure you want to delete this post?</h3> *@
+@* <div> *@
+@*     <h4>Title: @Html.DisplayFor(model => model.Title)</h4> *@
+@*     <p>Content: @Html.DisplayFor(model => model.Content)</p> *@
+@*     <p>Published on: @Html.DisplayFor(model => model.PublishDate)</p> *@
+@*     <p>Tags: @Html.DisplayFor(model => model.Tags)</p> *@
+@* </div> *@
+@* *@
+@* <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post"> *@
+@*     <input type="submit" asp-action="Delete" asp-controller="Post"  class="btn btn-danger" /> *@
+@*     <a asp-action="Index" class="btn btn-secondary">Cancel</a> *@
+@* </form> *@
+
+
+@model AlbBlogger1.Data.Post
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this post?</h3>
+<div>
+    <h4>Title: @Html.DisplayFor(model => model.Title)</h4>
+    <p>Content: @Html.DisplayFor(model => model.Content)</p>
+    <p>Published on: @Html.DisplayFor(model => model.PublishDate)</p>
+    <p>Tags: @Html.DisplayFor(model => model.Tags)</p>
+</div>
+
+<form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
+    @Html.AntiForgeryToken() <!-- Add AntiForgeryToken for security -->
+    <input type="submit" value="Delete" class="btn btn-danger" />
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

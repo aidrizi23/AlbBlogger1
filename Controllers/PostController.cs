@@ -80,9 +80,9 @@ public class PostController : Controller
             {
                 Title = viewModel.Title,
                 Content = viewModel.Content,
-                PublishDate = viewModel.PublishDate,
+                PublishDate = DateTime.Now,
                 Tags = viewModel.Tags,
-                Likes = viewModel.Likes, // Set default values or handle them as needed
+                Likes = 0,
                 Views = 0,
                 Image = viewModel.Image,
                 UserId = userId,
@@ -116,5 +116,34 @@ public class PostController : Controller
 
         return View("Index", posts);
     }
+    // ---------------------------------------------------------------------
+    
+    
+    // ------------------------ Likes And Views ----------------------------
+
+    [HttpPost]
+    public async Task<IActionResult> LikePost(int id)
+    {
+        try
+        {
+            var post = await _postService.GetPostByIdAsync(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            await _postService.LikePostByIdAsync(id);
+
+            // Optionally, you can return updated post details if needed
+            return Json(new { success = true, likes = post.Likes + 1 });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception or handle it appropriately
+            return StatusCode(500, new { success = false, message = "Failed to like the post." });
+        }
+    }
+
+
 
 }

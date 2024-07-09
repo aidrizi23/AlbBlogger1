@@ -9,7 +9,8 @@ public class Post : BaseEntity
     public string Content { get; set; }
     // public string Author { get; set; } // Change to type representing user (e.g., string for username or User type)
     public DateTime PublishDate { get; set; }
-    
+    public DateTime? LastEdited { get; set; }
+
     public List<string>? Tags { get; set; }
     // public List<Comment> Comments { get; set; }
     

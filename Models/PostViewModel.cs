@@ -13,8 +13,8 @@ public class PostViewModel
     [Required(ErrorMessage = "The Content field is required.")]
     public string Content { get; set; }
 
-    public DateTime PublishDate { get; set; }
-
+    // public DateTime PublishDate { get; set; }
+    // public DateTime LastEdited { get; set; }
     public List<string> Tags { get; set; }
 
     public int Likes { get; set; }
