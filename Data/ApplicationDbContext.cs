@@ -91,5 +91,6 @@ namespace AlbBlogger1.Data
         // public DbSet<AlbBlogger1.Models.PostViewModel> PostViewModel { get; set; } = default!;
         
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Bookmark> Bookmarks { get; set; }
     }
 }

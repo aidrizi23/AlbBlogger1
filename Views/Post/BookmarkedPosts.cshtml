@@ -1,0 +1,155 @@
+@* @model IEnumerable<AlbBlogger1.Data.Post> *@
+@* *@
+@* @{ *@
+@*     ViewData["Title"] = "BookmarkedPosts"; *@
+@*     Layout = "~/Views/Shared/_Layout.cshtml"; *@
+@* } *@
+@* *@
+@* <h1>BookmarkedPosts</h1> *@
+@* *@
+@* <p> *@
+@*     <a asp-action="Create">Create New</a> *@
+@* </p> *@
+@* <table class="table"> *@
+@*     <thead> *@
+@*         <tr> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Title) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Content) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.PublishDate) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.LastEdited) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Tags) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Views) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.Image) *@
+@*             </th> *@
+@*             <th> *@
+@*                 @Html.DisplayNameFor(model => model.LikeCount) *@
+@*             </th> *@
+@*             <th></th> *@
+@*         </tr> *@
+@*     </thead> *@
+@*     <tbody> *@
+@* @foreach (var item in Model) { *@
+@*         <tr> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Title) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Content) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.PublishDate) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.LastEdited) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Tags) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Views) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.Image) *@
+@*             </td> *@
+@*             <td> *@
+@*                 @Html.DisplayFor(modelItem => item.LikeCount) *@
+@*             </td> *@
+@*         </tr> *@
+@* } *@
+@*     </tbody> *@
+@* </table> *@
+
+@using AlbBlogger1.Data
+@using AlbBlogger1.Repositories.Pagination
+@using Microsoft.AspNetCore.Identity
+@model  IEnumerable<AlbBlogger1.Data.Post>
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Bookmarked Posts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Bookmarked Posts</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary tweet-button">Create New Post</a>
+</p>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        @foreach (var post in Model)
+        {
+            <div class="card mb-3 tweet-card">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelItem => post.Title)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelItem => post.Content)</p>
+                    <p class="card-text"><small class="text-muted">Published on @Html.DisplayFor(modelItem => post.PublishDate)</small></p>
+                    <p class="card-text">
+                        Tags: @Html.DisplayFor(modelItem => post.Tags)
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            @if (User.Identity.IsAuthenticated && UserManager.GetUserId(User) == post.UserId)
+                            {
+                                <a asp-action="Edit" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary tweet-button">Edit</a>
+                                <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary tweet-button">View</a>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-sm btn-outline-secondary tweet-button disabled">Edit</button>
+                                <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary tweet-button">View</a>
+                            }
+                            <button class="like-button" data-post-id="@post.Id">Like</button>
+                            <small id="post-likes-@post.Id" class="text-muted">@post.Likes Likes</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Function to handle post liking
+    function likePost(id) {
+        $.ajax({
+            url: '@Url.Action("LikePost", "Post")', // Adjust the action and controller name as per your project
+            type: 'POST',
+            data: { id: id },
+            success: function(response) {
+                if (response.success) {
+                    // Update the like count on success
+                    $('#post-likes-' + id).text(response.likes + ' Likes');
+                } else {
+                    alert(response.message); // Display error message if liking failed
+                }
+            },
+            error: function() {
+                alert('Error occurred while liking the post.'); // Display error message if AJAX request fails
+            }
+        });
+    }
+
+    // Call likePost function on button click
+    $('.like-button').click(function() {
+        var id = $(this).data('post-id');
+        likePost(id);
+    });
+</script>
+}
