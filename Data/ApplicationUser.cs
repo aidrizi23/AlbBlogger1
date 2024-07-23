@@ -5,7 +5,7 @@ namespace AlbBlogger1.Data;
 public class ApplicationUser : IdentityUser<string>
 {
     public ICollection<Post>? Posts { get; set; }
-    public ICollection<Like> Likes { get; set; }
+    
     public ICollection<Bookmark> Bookmarks { get; set; }
     
 }

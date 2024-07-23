@@ -20,20 +20,6 @@ namespace AlbBlogger1.Data
                 .HasOne(p => p.User)
                 .WithMany(u => u.Posts)
                 .HasForeignKey(p => p.UserId);
-
-            modelBuilder.Entity<Like>()
-                .HasOne(l => l.Post)
-                .WithMany(p => p.Likes)
-                .HasForeignKey(l => l.PostId)
-                .OnDelete(DeleteBehavior.Restrict); // Change to Restrict
-
-            modelBuilder.Entity<Like>()
-                .HasOne(l => l.User)
-                .WithMany()
-                .HasForeignKey(l => l.UserId)
-                .OnDelete(DeleteBehavior.Cascade); // Consider changing to Restrict if needed
-
-            
             
             const string ADMIN_ID = "a18be9c0-aa65-4af8-bd17-00bd9344e575";
             const string ADMIN_ROLE_ID = "b18be9c0-aa65-4af8-bd17-00bd9344e576";
@@ -90,7 +76,7 @@ namespace AlbBlogger1.Data
         
         // public DbSet<AlbBlogger1.Models.PostViewModel> PostViewModel { get; set; } = default!;
         
-        public DbSet<Like> Likes { get; set; }
+
         public DbSet<Bookmark> Bookmarks { get; set; }
     }
 }

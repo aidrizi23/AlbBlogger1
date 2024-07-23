@@ -13,15 +13,14 @@ public class PostController : Controller
     private readonly IPostService _postService;
     private readonly IUserService _userService;
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ILikeService _likeService;
+    
     private readonly IBookmarkService _bookmarkService;
 
-    public PostController(IPostService postService, IUserService userService, UserManager<ApplicationUser> userManager, ILikeService likeService, IBookmarkService bookmarkService)
+    public PostController(IPostService postService, IUserService userService, UserManager<ApplicationUser> userManager, IBookmarkService bookmarkService)
     {
         _postService = postService;
         _userService = userService;
         _userManager = userManager;
-        _likeService = likeService;
         _bookmarkService = bookmarkService;
     }
 
@@ -87,8 +86,6 @@ public class PostController : Controller
                 Content = viewModel.Content,
                 PublishDate = DateTime.Now,
                 Tags = viewModel.Tags,
-                // Likes = 0,
-                Likes = new List<Like>(),
                 Views = 0,
                 Image = viewModel.Image,
                 UserId = userId,
@@ -102,70 +99,6 @@ public class PostController : Controller
     }
     
     
-    // --------------------------- FIlters ------------------------
-    // public async Task<IActionResult> FilterByHighestLikes(int pageIndex = 1, int pageSize = 10)
-    // {
-    //     var posts = await _postService.GetPaginatedPostsByHighestLikes(pageIndex, pageSize);
-    //
-    //     // Firstly, let's get the posts of the logged-in user
-    //     var user = await _userManager.GetUserAsync(User);
-    //     var userId = _userManager.GetUserId(User);
-    //
-    //     if (user != null)
-    //         // Filter posts by the logged-in user's ID
-    //         posts = new PaginatedList<Post>(
-    //             posts.Where(x => x.UserId == userId).ToList(),
-    //             posts.TotalCount,
-    //             pageIndex,
-    //             pageSize
-    //         );
-    //
-    //     return View("Index", posts);
-    // }
-    // ---------------------------------------------------------------------
-    
-    
-    // ------------------------ Likes And Views ----------------------------
-
-    [HttpPost]
-    public async Task<IActionResult> LikePost(int id)
-    {
-        var post = await _postService.GetPostByIdAsync(id);
-
-        var user = await _userManager.GetUserAsync(User);
-        string userId = user.Id;
-        if (string.IsNullOrEmpty(userId))
-        {
-            return Unauthorized();
-        }
-
-        var existingLike = await _likeService.GetByPostAndUserAsync(id, userId);
-        if (existingLike != null)
-        {
-            // User has already liked this post
-            return BadRequest("You have already liked this post.");
-        }
-
-        // Create new Like
-        var like = new Like
-        {
-            UserId = userId,
-            User = user,
-            PostId = post.Id,
-            Post = post
-        };
-
-        await _likeService.CreateAsync(like);
-
-        // Update post's like count
-        post.Likes.Add(like);
-        post.LikeCount = post.Likes.Count; // Update the LikeCount property
-        var x = post.LikeCount;
-        await _postService.EditPostAsync(post);
-
-        return Json(new { success = true, likes = post.LikeCount }); // Return updated like count
-    }
-
 
     [HttpPost]
     public async Task<IActionResult> BookmarkPost(int postId)

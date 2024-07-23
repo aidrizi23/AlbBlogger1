@@ -1,142 +1,3 @@
-@* *@
-@* *@
-@* @using AlbBlogger1.Data *@
-@* @using AlbBlogger1.Repositories.Pagination *@
-@* @using Microsoft.AspNetCore.Identity *@
-@* @model PaginatedList<Post> *@
-@* @inject UserManager<ApplicationUser> UserManager *@
-@* *@
-@* @{ *@
-@* ViewData["Title"] = "Latest Posts"; *@
-@* Layout = "~/Views/Shared/_Layout.cshtml"; *@
-@* } *@
-@* *@
-@* <h1>Latest Tweets</h1> *@
-@* *@
-@* <p> *@
-@*     <a asp-action="Create" class="btn btn-primary tweet-button">Create New Tweet</a> *@
-@* </p> *@
-@* *@
-@* <div class="row"> *@
-@*     <div class="col-md-12"> *@
-@*         <form asp-action="FilterByHighestLikes" method="get" class="form-inline"> *@
-@*             <button type="submit" class="btn btn-secondary tweet-button">Filter by Highest Likes</button> *@
-@*         </form> *@
-@*     </div> *@
-@* </div> *@
-@* *@
-@* <div class="row mt-3"> *@
-@*     <div class="col-md-12"> *@
-@*         @foreach (var post in Model) *@
-@*         { *@
-@*         <div class="card mb-3 tweet-card"> *@
-@*             <div class="card-body"> *@
-@*                 <h5 class="card-title">@Html.DisplayFor(modelItem => post.Title)</h5> *@
-@*                 <p class="card-text">@Html.DisplayFor(modelItem => post.Content)</p> *@
-@*                 <p class="card-text"><small class="text-muted">Published on @Html.DisplayFor(modelItem => post.PublishDate)</small></p> *@
-@*                 <p class="card-text"> *@
-@*                     Tags: @Html.DisplayFor(modelItem => post.Tags) *@
-@*                 </p> *@
-@*                 <div class="d-flex justify-content-between align-items-center"> *@
-@*                     <div class="btn-group"> *@
-@*                         @if (User.Identity.IsAuthenticated && UserManager.GetUserId(User) == post.UserId) *@
-@*                         { *@
-@*                         <a asp-action="Edit" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary tweet-button">Edit</a> *@
-@*                         <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary tweet-button">View</a> *@
-@*                         <button type="button" class="btn btn-sm btn-danger tweet-button" onclick="openDeleteConfirmation('@post.Id', '@post.Title', '@post.Content', '@post.PublishDate', '@post.Tags')">Delete</button> *@
-@*                         } *@
-@*                         else *@
-@*                         { *@
-@*                         <button type="button" class="btn btn-sm btn-outline-secondary tweet-button disabled">Edit</button> *@
-@*                         <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary tweet-button">View</a> *@
-@*                         } *@
-@*                         <button class="like-button" data-post-id="@post.Id">Like</button> *@
-@*                         <small id="post-likes-@post.Id" class="text-muted">@post.Likes Likes</small> *@
-@*                     </div> *@
-@*                 </div> *@
-@*             </div> *@
-@*         </div> *@
-@*         } *@
-@*     </div> *@
-@* </div> *@
-@* *@
-@* <!-- Modal for Delete Confirmation --> *@
-@* <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true"> *@
-@*     <div class="modal-dialog" role="document"> *@
-@*         <div class="modal-content"> *@
-@*             <div class="modal-header"> *@
-@*                 <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete Confirmation</h5> *@
-@*                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"> *@
-@*                     <span aria-hidden="true">&times;</span> *@
-@*                 </button> *@
-@*             </div> *@
-@*             <div class="modal-body"> *@
-@*                 <h3>Are you sure you want to delete this tweet?</h3> *@
-@*                 <div> *@
-@*                     <h4>Title: <span id="deletePostTitle"></span></h4> *@
-@*                     <p>Content: <span id="deletePostContent"></span></p> *@
-@*                     <p>Published on: <span id="deletePostPublishDate"></span></p> *@
-@*                     <p>Tags: <span id="deletePostTags"></span></p> *@
-@*                 </div> *@
-@*             </div> *@
-@*             <div class="modal-footer"> *@
-@*                 <form id="deletePostForm" method="post"> *@
-@*                     @Html.AntiForgeryToken() *@
-@*                     <button type="submit" class="btn btn-danger tweet-button">Delete</button> *@
-@*                     <button type="button" class="btn btn-secondary tweet-button" data-dismiss="modal">Cancel</button> *@
-@*                 </form> *@
-@*             </div> *@
-@*         </div> *@
-@*     </div> *@
-@* </div> *@
-@* *@
-@* @section Scripts { *@
-@* <script> *@
-@*     // Function to handle post liking *@
-@*     function likePost(id) { *@
-@*         $.ajax({ *@
-@*             url: '@Url.Action("LikePost", "Post")', // Adjust the action and controller name as per your project *@
-@*             type: 'POST', *@
-@*             data: { id: id }, *@
-@*             success: function(response) { *@
-@*                 if (response.success) { *@
-@*                     // Update the like count on success *@
-@*                     $('#post-likes-' + id).text(response.likes + ' Likes'); *@
-@*                 } else { *@
-@*                     alert(response.message); // Display error message if liking failed *@
-@*                 } *@
-@*             }, *@
-@*             error: function() { *@
-@*                 alert('Error occurred while liking the post.'); // Display error message if AJAX request fails *@
-@*             } *@
-@*         }); *@
-@*     } *@
-@* *@
-@*     // Call likePost function on button click *@
-@*     // Call likePost function on button click *@
-@*     $('.like-button').click(function() { *@
-@*         var id = $(this).data('post-id'); // Use data-post-id instead of data-id *@
-@*         likePost(id); *@
-@*     }); *@
-@* *@
-@* *@
-@*     function openDeleteConfirmation(postId, title, content, publishDate, tags) { *@
-@*         // Update modal with post details *@
-@*         $('#deletePostTitle').text(title); *@
-@*         $('#deletePostContent').text(content); *@
-@*         $('#deletePostPublishDate').text(publishDate); *@
-@*         $('#deletePostTags').text(tags); *@
-@* *@
-@*         // Update form action with the correct post id *@
-@*         $('#deletePostForm').attr('action', '/Post/DeleteConfirmed/' + postId); *@
-@* *@
-@*         // Show the modal *@
-@*         $('#deleteConfirmationModal').modal('show'); *@
-@*     } *@
-@* </script> *@
-@* } *@
-
-
 
 
 @using AlbBlogger1.Data
@@ -189,8 +50,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
                         <button type="button" class="btn btn-sm btn-outline-secondary tweet-button disabled">Edit</button>
                         <a asp-action="Details" asp-route-id="@post.Id" class="btn btn-sm btn-outline-secondary tweet-button">View</a>
                         }
-                        <button class="like-button" data-post-id="@post.Id">Like</button>
-                        <small id="post-likes-@post.Id" class="text-muted">@post.Likes Likes</small>
+                       
                     </div>
                     <button class="bookmark-button" data-post-id="@post.Id">Bookmark</button>
                 </div>
@@ -233,25 +93,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
 @section Scripts {
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Function to handle post liking
-    function likePost(id) {
-        $.ajax({
-            url: '@Url.Action("LikePost", "Post")', // Adjust the action and controller name as per your project
-            type: 'POST',
-            data: { id: id },
-            success: function(response) {
-                if (response.success) {
-                    // Update the like count on success
-                    $('#post-likes-' + id).text(response.likes + ' Likes');
-                } else {
-                    alert(response.message); // Display error message if liking failed
-                }
-            },
-            error: function() {
-                alert('Error occurred while liking the post.'); // Display error message if AJAX request fails
-            }
-        });
-    }
+
 
     // Function to handle post bookmarking
     function bookmarkPost(postId) {
@@ -272,12 +114,6 @@ Layout = "~/Views/Shared/_Layout.cshtml";
         });
     }
 
-    // Call likePost function on button click
-    $('.like-button').click(function() {
-        var id = $(this).data('post-id');
-        likePost(id);
-    });
-
     // Call bookmarkPost function on button click
     $('.bookmark-button').click(function() {
         var postId = $(this).data('post-id');
@@ -292,7 +128,7 @@ Layout = "~/Views/Shared/_Layout.cshtml";
         $('#deletePostTags').text(tags);
 
         // Update form action with the correct post id
-        $('#deletePostForm').attr('action', '/Post/DeleteConfirmed/' + postId);
+        $('#deletePostForm').attr('action', 'Post/DeleteConfirmed/' + postId);
 
         // Show the modal
         $('#deleteConfirmationModal').modal('show');

@@ -9,11 +9,11 @@ namespace AlbBlogger1.Repositories;
 public class PostRepository : BaseRepository<Post>
 {
     private readonly ApplicationDbContext _applicationDbContext;
-    private readonly ILikeService _likeService;
-    public PostRepository(ApplicationDbContext applicationDbContext, ILikeService likeService) : base(applicationDbContext)
+    
+    public PostRepository(ApplicationDbContext applicationDbContext) : base(applicationDbContext)
     {
         _applicationDbContext = applicationDbContext;
-        _likeService = likeService;
+        
     }
 
     public async Task<PaginatedList<Post>> GetAllPaginatedPostsByUserId(string userId, int pageIndex = 1, int pageSize = 10)
@@ -22,10 +22,7 @@ public class PostRepository : BaseRepository<Post>
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex , pageSize );
     }
 
-    public async Task LikePostByIdAsync(int postId, string userId)
-    {
-        await _likeService.LikePostAsync(postId, userId);
-    }
+
 
     public async Task ViewPostByIdAsync(int id)
     {
@@ -43,20 +40,7 @@ public class PostRepository : BaseRepository<Post>
         var posts =  _applicationDbContext.Posts.AsQueryable();
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
     }
-    
-    // ------------------------------ Filters ----------------------------
-    // public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10)
-    // {
-    //     var posts = _applicationDbContext.Posts.AsNoTracking().OrderByDescending(x => x.Likes).AsQueryable();
-    //     return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
-    // }
-    //
-    // public async Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10)
-    // {
-    //     var posts = _applicationDbContext.Posts.AsNoTracking().OrderBy(x => x.Likes).AsQueryable();
-    //     return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
-    // }
-    //
+
     public async Task<PaginatedList<Post>> GetPaginatedPostsByHighestViews(int pageIndex = 1, int pageSize = 10)
     {
         var posts = _applicationDbContext.Posts.AsNoTracking().OrderByDescending(x => x.Views).AsQueryable();
@@ -68,6 +52,6 @@ public class PostRepository : BaseRepository<Post>
         var posts = _applicationDbContext.Posts.AsNoTracking().OrderBy(x => x.Views).AsQueryable();
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
     }
-    // -------------------------------------------------------------------------
+    
 
 }

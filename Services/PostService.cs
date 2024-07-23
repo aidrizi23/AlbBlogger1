@@ -47,10 +47,7 @@ public class PostService : IPostService
         return await _postRepository.GetAllPaginatedPostsByUserId(userId);
     }
 
-    public async Task LikePostByIdAsync(int postId, string userId)
-    {
-        await _postRepository.LikePostByIdAsync(postId, userId);
-    } 
+   
     public async Task ViewPostByIdAsync(int id)
     {
         await _postRepository.ViewPostByIdAsync(id);
@@ -91,7 +88,6 @@ public interface IPostService
      Task DeletePostAsync(Post post);
      Task EditPostAsync(Post post);
      Task<PaginatedList<Post>> GetAllPaginatedPostsByUserId(string userId);
-     Task LikePostByIdAsync(int postId, string userId);
      Task ViewPostByIdAsync(int id);
      Task<PaginatedList<Post>> GetAllPaginatedPostsAsync(int pageIndex = 1, int pageSize = 10);
      // Task<PaginatedList<Post>> GetPaginatedPostsByHighestLikes(int pageIndex = 1, int pageSize = 10);

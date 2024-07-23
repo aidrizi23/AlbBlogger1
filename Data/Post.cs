@@ -22,14 +22,10 @@ public class Post : BaseEntity
     public string UserId { get; set; }
     public ApplicationUser User;
     
-    public ICollection<Like> Likes { get; set; }
+    
     public int LikeCount { get; set; }
     
     
-    public Post()
-    {
-        Likes = new List<Like>(); // Initialize Likes collection in the constructor
-    }
-    
+  
 
 }
