@@ -15,13 +15,15 @@ public class PostController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     
     private readonly IBookmarkService _bookmarkService;
+    private readonly ILikeService _likeService;
 
-    public PostController(IPostService postService, IUserService userService, UserManager<ApplicationUser> userManager, IBookmarkService bookmarkService)
+    public PostController(IPostService postService, IUserService userService, UserManager<ApplicationUser> userManager, IBookmarkService bookmarkService, ILikeService likeService)
     {
         _postService = postService;
         _userService = userService;
         _userManager = userManager;
         _bookmarkService = bookmarkService;
+        _likeService = likeService;
     }
 
     public async Task<IActionResult> Index(int pageIndex = 1)
@@ -123,5 +125,31 @@ public class PostController : Controller
         return View(bookmarkedPosts);
     }
 
+    [HttpPost]
+    public async Task<IActionResult> LikePost(int postId)
+    {
+        try
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
 
+            var likeCount = await _likeService.LikePostByUserAndPostId(user.Id, postId);
+
+            return Json(new { success = true, message = "Like status updated successfully.", likeCount = likeCount });
+        }
+        catch (Exception ex)
+        {
+            // Log the exception
+            return Json(new { success = false, message = "An error occurred while processing your request." });
+        }
+    }
+
+    public async Task<IActionResult> UsersWhoLikedPost(int postId)
+    {
+        var users = await _likeService.GetUsersWhoLikedPostByPostId(postId);
+        return View(users);
+    }
 }

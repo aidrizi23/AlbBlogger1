@@ -14,5 +14,5 @@ public class Bookmark : BaseEntity
     
     public IList<Post> BookmarkedPosts { get; set; }
     
-    public int Count { get; set; }
+    // public int Count { get; set; }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow.PointsToAnalysis;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 
@@ -17,16 +18,19 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IUserRoleService _userRoleService;
+        private readonly ILikeService _likeService;
 
         public AccountController(UserManager<ApplicationUser> userManager, 
                                 SignInManager<ApplicationUser> signInManager, 
                                 ILogger<AccountController> logger,
-                                IUserRoleService userRoleService)
+                                IUserRoleService userRoleService,
+                                ILikeService likeService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _userRoleService = userRoleService;
+            _likeService = likeService;
         }
 
         [HttpGet]
@@ -136,6 +140,15 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
 
             // If model state is not valid or registration fails, return to register view with errors
             return View(model);
+        }
+        
+        // method to get the liked posts of an user
+        public async Task<IActionResult> LikedPostsByUser()
+        {
+            var userId = (await _userManager.GetUserAsync(User)).Id;
+            var posts = await _likeService.GetLikedPostsByUserId(userId);
+            return View(posts);
+
         }
 
 

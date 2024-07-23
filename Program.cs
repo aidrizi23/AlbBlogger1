@@ -30,6 +30,7 @@ builder.Services.AddScoped<UserRoleRepository, UserRoleRepository>();
 builder.Services.AddScoped<RoleRepository, RoleRepository>();
 builder.Services.AddScoped<PostRepository, PostRepository>();
 builder.Services.AddTransient<BookmarkRepository, BookmarkRepository>();
+builder.Services.AddScoped<LikeRepository, LikeRepository>();
 #endregion
 
 #region Transient
@@ -39,6 +40,7 @@ builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IFileHandlerService, FileHandlerService>();
 builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IBookmarkService, BookmarkService>();
+builder.Services.AddTransient<ILikeService, LikeService>();
 #endregion
 
 

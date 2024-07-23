@@ -12,8 +12,9 @@ public class Post : BaseEntity
     public DateTime? LastEdited { get; set; }
 
     public List<string>? Tags { get; set; }
-    // public List<Comment> Comments { get; set; }
     
+    public ICollection<Like> Likes { get; set; }
+    public int LikeCount { get; set; }
  
     public int Views { get; set; }
     public string Image { get; set; }
@@ -21,9 +22,11 @@ public class Post : BaseEntity
     [ForeignKey("UserId")]
     public string UserId { get; set; }
     public ApplicationUser User;
+
     
     
-    public int LikeCount { get; set; }
+    
+    
     
     
   

@@ -18,7 +18,7 @@ public class PostRepository : BaseRepository<Post>
 
     public async Task<PaginatedList<Post>> GetAllPaginatedPostsByUserId(string userId, int pageIndex = 1, int pageSize = 10)
     {
-        var posts = _applicationDbContext.Posts.AsNoTracking().Where(X => X.UserId == userId).AsQueryable();
+        var posts = _applicationDbContext.Posts.AsNoTracking().Include(x => x.Likes).Where(X => X.UserId == userId).AsQueryable();
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex , pageSize );
     }
 
@@ -37,7 +37,7 @@ public class PostRepository : BaseRepository<Post>
     
     public async Task<PaginatedList<Post>> GetAllPaginatedPostAsync(int pageIndex = 1, int pageSize = 10)
     {
-        var posts =  _applicationDbContext.Posts.AsQueryable();
+        var posts =  _applicationDbContext.Posts.Include(x => x.Likes).AsQueryable();
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
     }
 

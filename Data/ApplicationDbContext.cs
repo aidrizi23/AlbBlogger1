@@ -20,7 +20,23 @@ namespace AlbBlogger1.Data
                 .HasOne(p => p.User)
                 .WithMany(u => u.Posts)
                 .HasForeignKey(p => p.UserId);
-            
+            modelBuilder.Entity<Post>()
+                .HasMany(p => p.Likes)
+                .WithOne(l => l.Post)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Like>(b =>
+            {
+                b.HasOne(l => l.Post)
+                    .WithMany(p => p.Likes)
+                    .HasForeignKey(l => l.PostId)
+                    .OnDelete(DeleteBehavior.NoAction); // Change cascade delete to NoAction
+
+                b.HasOne(l => l.User)
+                    .WithMany(u => u.Likes)
+                    .HasForeignKey(l => l.UserId)
+                    .OnDelete(DeleteBehavior.NoAction); // Change cascade delete to NoAction
+            });
+
             const string ADMIN_ID = "a18be9c0-aa65-4af8-bd17-00bd9344e575";
             const string ADMIN_ROLE_ID = "b18be9c0-aa65-4af8-bd17-00bd9344e576";
 
@@ -78,5 +94,6 @@ namespace AlbBlogger1.Data
         
 
         public DbSet<Bookmark> Bookmarks { get; set; }
+        public DbSet<Like> Likes { get; set; }
     }
 }
