@@ -11,7 +11,7 @@ namespace AlbBlogger1.Data
             : base(options)
         {
         }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -19,23 +19,20 @@ namespace AlbBlogger1.Data
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.User)
                 .WithMany(u => u.Posts)
-                .HasForeignKey(p => p.UserId);
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade); // Cascade delete for posts
+
             modelBuilder.Entity<Post>()
                 .HasMany(p => p.Likes)
                 .WithOne(l => l.Post)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Like>(b =>
-            {
-                b.HasOne(l => l.Post)
-                    .WithMany(p => p.Likes)
-                    .HasForeignKey(l => l.PostId)
-                    .OnDelete(DeleteBehavior.NoAction); // Change cascade delete to NoAction
+                .HasForeignKey(l => l.PostId)
+                .OnDelete(DeleteBehavior.Cascade); // Cascade delete for likes when post is deleted
 
-                b.HasOne(l => l.User)
-                    .WithMany(u => u.Likes)
-                    .HasForeignKey(l => l.UserId)
-                    .OnDelete(DeleteBehavior.NoAction); // Change cascade delete to NoAction
-            });
+            modelBuilder.Entity<Like>()
+                .HasOne(l => l.User)
+                .WithMany(u => u.Likes)
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.Restrict); // Restrict delete for likes when user is deleted
 
             const string ADMIN_ID = "a18be9c0-aa65-4af8-bd17-00bd9344e575";
             const string ADMIN_ROLE_ID = "b18be9c0-aa65-4af8-bd17-00bd9344e576";
@@ -78,21 +75,12 @@ namespace AlbBlogger1.Data
                     UserId = ADMIN_ID,
                     RoleId = ADMIN_ROLE_ID
                 });
-
-            // Configure entity relationships, etc.
-            // Example: modelBuilder.Entity<Entity>().HasOne(e => e.OtherEntity).WithMany().HasForeignKey(e => e.OtherEntityId);
-
-            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Post> Posts { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<ApplicationRole> ApplicationRoles { get; set; }
         public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
-        
-        // public DbSet<AlbBlogger1.Models.PostViewModel> PostViewModel { get; set; } = default!;
-        
-
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<Like> Likes { get; set; }
     }

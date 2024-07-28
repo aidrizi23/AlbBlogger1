@@ -132,13 +132,13 @@ namespace AlbBlogger1.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6e35def2-6884-429b-b190-b2912541517c",
+                            ConcurrencyStamp = "85a4a074-adb3-4967-b7ef-ca7ad835453a",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKUj+UzWNs1kQHwHnma0cRiDhn0tiCgsOaJK55xvgdTx9PLzY/6IeEhPAtYukGLwgw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEI/0S1UDf0k+5CSxTn7Ob2rW7zPJh6yIx+4k7Vt0yjvO3X1jt++AN7sGOCpcRlR0fQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -220,6 +220,9 @@ namespace AlbBlogger1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("BookmarkId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Clicks")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -384,13 +387,13 @@ namespace AlbBlogger1.Migrations
                     b.HasOne("AlbBlogger1.Data.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("AlbBlogger1.Data.ApplicationUser", "User")
                         .WithMany("Likes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Post");

@@ -37,7 +37,7 @@ public class PostRepository : BaseRepository<Post>
     
     public async Task<PaginatedList<Post>> GetAllPaginatedPostAsync(int pageIndex = 1, int pageSize = 10)
     {
-        var posts =  _applicationDbContext.Posts.Include(x => x.Likes).AsQueryable();
+        var posts =  _applicationDbContext.Posts.Include(x => x.User).Include(x => x.Likes).AsQueryable();
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
     }
 
@@ -52,6 +52,14 @@ public class PostRepository : BaseRepository<Post>
         var posts = _applicationDbContext.Posts.AsNoTracking().OrderBy(x => x.Views).AsQueryable();
         return await PaginatedList<Post>.CreateAsync(posts, pageIndex, pageSize);
     }
-    
+
+
+    public async Task IncreaseClickCountByPostId(int postId)
+    {
+        var post = await _applicationDbContext.Posts.FirstOrDefaultAsync(x => x.Id == postId);
+        post.Clicks++;
+        _applicationDbContext.Update(post);
+        await _applicationDbContext.SaveChangesAsync();
+    }
 
 }

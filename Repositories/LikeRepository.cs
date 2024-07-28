@@ -44,6 +44,7 @@ public class LikeRepository : BaseRepository<Like>
             // Add the new Like to the database and to the post's Likes collection
             await _context.Likes.AddAsync(like);
             post.Likes.Add(like);
+            post.LikeCount++;
         }
         else
         {
@@ -55,6 +56,7 @@ public class LikeRepository : BaseRepository<Like>
                 .Include(p => p.Likes)
                 .FirstOrDefaultAsync(x => x.Id == postId);
             post?.Likes.Remove(like);
+            post.LikeCount--;
         }
 
         // Save changes to the database

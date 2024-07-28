@@ -17,18 +17,11 @@ public class Post : BaseEntity
     public int LikeCount { get; set; }
  
     public int Views { get; set; }
+    public int Clicks { get; set; }
     public string Image { get; set; }
     
     [ForeignKey("UserId")]
     public string UserId { get; set; }
     public ApplicationUser User;
-
-    
-    
-    
-    
-    
-    
-  
 
 }

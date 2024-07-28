@@ -75,7 +75,11 @@ public class PostService : IPostService
     {
         return await _postRepository.GetPaginatedPostsByLowestViews(pageIndex, pageSize);
     }
-    
+
+    public async Task IncreaseClickCountByPostId(int postId)
+    {
+        await _postRepository.IncreaseClickCountByPostId(postId);
+    }
     
 }
 
@@ -94,5 +98,5 @@ public interface IPostService
      // Task<PaginatedList<Post>> GetPaginatedPostsByLowestLikes(int pageIndex = 1, int pageSize = 10);
      Task<PaginatedList<Post>> GetPaginatedPostsByHighestViews(int pageIndex = 1, int pageSize = 10);
      Task<PaginatedList<Post>> GetPaginatedPostsByLowestViews(int pageIndex = 1, int pageSize = 10);
-
+     Task IncreaseClickCountByPostId(int postId);
 }
