@@ -1,0 +1,90 @@
+@using AlbBlogger1.Data
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model PostDetailsViewModel
+@inject UserManager<ApplicationUser> UserManager
+
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container mt-4">
+    @if (Model?.Post != null)
+    {
+        <div class="card tweet-card">
+            <div class="card-body">
+                <div class="tweet-header">
+                    <img src="https://via.placeholder.com/48" alt="User Avatar" class="user-avatar">
+                    <div>
+                        <span class="user-name">@Model.Post.User?.UserName</span>
+                        <span class="tweet-timestamp">@Model.Post.PublishDate.ToString("MMM dd")</span>
+                    </div>
+                </div>
+                <div class="tweet-content mt-3">
+                    <h5>@Model.Post.Title</h5>
+                    <p>@Model.Post.Content</p>
+                    @if (!string.IsNullOrEmpty(Model.Post.Image))
+                    {
+                        <img src="@Model.Post.Image" alt="Tweet Image" class="img-fluid mt-2">
+                    }
+                </div>
+                <div class="tweet-stats mt-3">
+                    <span title="Views"><i class="far fa-eye"></i> @Model.Post.Views</span>
+                    <span title="Likes"><i class="far fa-heart"></i> @Model.Post.LikeCount</span>
+                    <span title="Replies"><i class="far fa-comment"></i> @(Model.Replies?.Count() ?? 0)</span>
+                </div>
+                <!-- Add tweet actions here (like, bookmark, etc.) -->
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Reply to this tweet</h5>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <form asp-action="CreateReply" asp-route-postId="@Model.Post.Id" method="post">
+                        <div class="form-group">
+                            <textarea name="content" class="form-control" rows="3" required placeholder="Write your reply..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Reply</button>
+                    </form>
+                }
+                else
+                {
+                    <p>Please <a asp-area="Identity" asp-page="/Account/Login">log in</a> to reply.</p>
+                }
+            </div>
+        </div>
+
+        <h5 class="mt-4">Replies</h5>
+        @if (Model.Replies != null && Model.Replies.Any())
+        {
+            foreach (var reply in Model.Replies.OrderByDescending(r => r.CreatedAt))
+            {
+                <div class="card tweet-card mt-2">
+                    <div class="card-body">
+                        <div class="tweet-header">
+                            <img src="https://via.placeholder.com/32" alt="User Avatar" class="user-avatar-small">
+                            <div>
+                                <span class="user-name">@reply.User?.UserName</span>
+                                <span class="tweet-timestamp">@reply.CreatedAt.ToString("MMM dd")</span>
+                            </div>
+                        </div>
+                        <div class="tweet-content mt-2">
+                            <p>@reply.Content</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No replies yet.</p>
+        }
+    }
+    else
+    {
+        <p>Tweet not found.</p>
+    }
+</div>
