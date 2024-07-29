@@ -20,3 +20,48 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.tweet-card {
+  border: 1px solid #e1e8ed;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  transition: background-color 0.2s;
+}
+.tweet-card:hover {
+  background-color: #f5f8fa;
+}
+.tweet-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.user-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.user-name {
+  font-weight: bold;
+}
+.tweet-timestamp {
+  color: #657786;
+  font-size: 0.9em;
+  margin-left: 5px;
+}
+.tweet-content {
+  margin-bottom: 10px;
+}
+.tweet-stats span {
+  margin-right: 15px;
+  color: #657786;
+}
+.tweet-actions button {
+  margin-right: 10px;
+}

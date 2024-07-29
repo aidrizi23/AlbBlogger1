@@ -34,6 +34,12 @@ namespace AlbBlogger1.Data
                 .HasForeignKey(l => l.UserId)
                 .OnDelete(DeleteBehavior.Restrict); // Restrict delete for likes when user is deleted
 
+            modelBuilder.Entity<Reply>()
+                .HasOne(r => r.Post)
+                .WithMany(p => p.Replies)
+                .HasForeignKey(r => r.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+            
             const string ADMIN_ID = "a18be9c0-aa65-4af8-bd17-00bd9344e575";
             const string ADMIN_ROLE_ID = "b18be9c0-aa65-4af8-bd17-00bd9344e576";
 
@@ -83,5 +89,6 @@ namespace AlbBlogger1.Data
         public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<Like> Likes { get; set; }
+        public DbSet<Reply> Replies { get; set; }
     }
 }

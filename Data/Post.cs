@@ -23,5 +23,8 @@ public class Post : BaseEntity
     [ForeignKey("UserId")]
     public string UserId { get; set; }
     public ApplicationUser User;
+    
+    
+    public ICollection<Reply> Replies { get; set; }
 
 }

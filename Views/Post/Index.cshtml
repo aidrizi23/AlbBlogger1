@@ -203,18 +203,20 @@
     // Function to handle deleting a post
     function deletePost(postId) {
         $.ajax({
-            url: '@Url.Action("Delete", "Post")',
+            url: '@Url.Action("Delete", "Post")/' + postId,
             type: 'POST',
-            data: { id: postId },
+            dataType: 'json',
             success: function(response) {
                 if (response.success) {
                     $('#post-' + postId).remove();
                     $('#deleteConfirmationModal').modal('hide');
+                    alert(response.message); // Optional: show a success message
                 } else {
-                    alert(response.message);
+                    alert(response.message || "An error occurred while deleting the post.");
                 }
             },
-            error: function() {
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error("AJAX error:", textStatus, errorThrown);
                 alert("An error occurred while deleting the post.");
             }
         });

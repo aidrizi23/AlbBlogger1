@@ -132,13 +132,13 @@ namespace AlbBlogger1.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "85a4a074-adb3-4967-b7ef-ca7ad835453a",
+                            ConcurrencyStamp = "0edf9c33-1302-4931-adad-e99b31f775b8",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEI/0S1UDf0k+5CSxTn7Ob2rW7zPJh6yIx+4k7Vt0yjvO3X1jt++AN7sGOCpcRlR0fQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN8Gbb8i/KV1LxxWk4abCOHVIjHBfuzv4e8WWjipTtkjmCYv7+nSqJcdBS2zeqXclg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -263,6 +263,37 @@ namespace AlbBlogger1.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("AlbBlogger1.Data.Reply", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Replies");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -416,6 +447,25 @@ namespace AlbBlogger1.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AlbBlogger1.Data.Reply", b =>
+                {
+                    b.HasOne("AlbBlogger1.Data.Post", "Post")
+                        .WithMany("Replies")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AlbBlogger1.Data.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("AlbBlogger1.Data.ApplicationRole", null)
@@ -469,6 +519,8 @@ namespace AlbBlogger1.Migrations
             modelBuilder.Entity("AlbBlogger1.Data.Post", b =>
                 {
                     b.Navigation("Likes");
+
+                    b.Navigation("Replies");
                 });
 #pragma warning restore 612, 618
         }
