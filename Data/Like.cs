@@ -6,10 +6,10 @@ public class Like : BaseEntity
 {
     // Foreign key for the user who liked the post
     [ForeignKey("UserId")]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
         
     // Navigation property to the user who liked the post
-    public virtual ApplicationUser User { get; set; }
+    public virtual ApplicationUser? User { get; set; }
         
     // Foreign key for the post that was liked
     [ForeignKey("PostId")]

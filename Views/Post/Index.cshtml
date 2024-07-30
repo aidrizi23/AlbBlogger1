@@ -1,3 +1,263 @@
+@* @using AlbBlogger1.Data *@
+@* @using AlbBlogger1.Repositories.Pagination *@
+@* @using Microsoft.AspNetCore.Identity *@
+@* @model PaginatedList<Post> *@
+@* @inject UserManager<ApplicationUser> UserManager *@
+@* *@
+@* @{ *@
+@*     ViewData["Title"] = "Latest Posts"; *@
+@*     Layout = "~/Views/Shared/_Layout.cshtml"; *@
+@* } *@
+@* *@
+@* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"> *@
+@* *@
+@* <style> *@
+@*     .tweet-card { *@
+@*         border: 1px solid #e1e8ed; *@
+@*         border-radius: 12px; *@
+@*         margin-bottom: 10px; *@
+@*         transition: background-color 0.2s; *@
+@*     } *@
+@*     .tweet-card:hover { *@
+@*         background-color: #f5f8fa; *@
+@*     } *@
+@*     .tweet-header { *@
+@*         display: flex; *@
+@*         align-items: center; *@
+@*         margin-bottom: 10px; *@
+@*     } *@
+@*     .user-avatar { *@
+@*         width: 48px; *@
+@*         height: 48px; *@
+@*         border-radius: 50%; *@
+@*         margin-right: 10px; *@
+@*     } *@
+@*     .user-name { *@
+@*         font-weight: bold; *@
+@*     } *@
+@*     .tweet-timestamp { *@
+@*         color: #657786; *@
+@*         font-size: 0.9em; *@
+@*     } *@
+@*     .tweet-content { *@
+@*         margin-bottom: 10px; *@
+@*     } *@
+@*     .tweet-actions button { *@
+@*         background: none; *@
+@*         border: none; *@
+@*         color: #657786; *@
+@*         margin-right: 20px; *@
+@*         cursor: pointer; *@
+@*         transition: color 0.2s; *@
+@*     } *@
+@*     .tweet-actions button:hover { *@
+@*         color: #1da1f2; *@
+@*     } *@
+@*     .create-tweet-btn { *@
+@*         position: fixed; *@
+@*         bottom: 20px; *@
+@*         right: 20px; *@
+@*         background-color: #1da1f2; *@
+@*         color: white; *@
+@*         border: none; *@
+@*         border-radius: 50%; *@
+@*         width: 60px; *@
+@*         height: 60px; *@
+@*         font-size: 24px; *@
+@*         cursor: pointer; *@
+@*         box-shadow: 0 2px 10px rgba(0,0,0,0.3); *@
+@*     } *@
+@* </style> *@
+@* *@
+@* <div class="container mt-4"> *@
+@*     <h1><i class="fab fa-twitter"></i> Latest Tweets</h1> *@
+@* *@
+@*     @foreach (var post in Model) *@
+@*     { *@
+@*         <div class="card tweet-card" id="post-@post.Id"> *@
+@*             <div class="card-body"> *@
+@*                 <div class="tweet-header"> *@
+@*                     <img src="https://via.placeholder.com/48" alt="User Avatar" class="user-avatar"> *@
+@*                     <div> *@
+@*                         <span class="user-name">@post.User.UserName</span> *@
+@*                         <span class="tweet-timestamp">@post.PublishDate.ToString("MMM dd")</span> *@
+@*                     </div> *@
+@*                 </div> *@
+@*                 <div class="tweet-content"> *@
+@*                     <h5>@Html.DisplayFor(modelItem => post.Title)</h5> *@
+@*                     <p>@Html.DisplayFor(modelItem => post.Content)</p> *@
+@*                 </div> *@
+@*                 <div class="tweet-actions"> *@
+@*                     <button onclick="incrementAndRedirect(@post.Id)" title="View"> *@
+@*                         <i class="far fa-eye"></i> <span class="view-count">@post.Views</span> *@
+@*                     </button> *@
+@*                     <button class="like-button" data-post-id="@post.Id" title="Like"> *@
+@*                         <i class="far fa-heart"></i> <span class="like-count">@post.Likes.Count</span> *@
+@*                     </button> *@
+@*                     <button class="bookmark-button" data-post-id="@post.Id" title="Bookmark"> *@
+@*                         <i class="far fa-bookmark"></i> *@
+@*                     </button> *@
+@*                     @if (User.Identity.IsAuthenticated && UserManager.GetUserId(User) == post.UserId) *@
+@*                     { *@
+@*                         <button onclick="location.href='@Url.Action("Edit", new { id = post.Id })'" title="Edit"> *@
+@*                             <i class="far fa-edit"></i> *@
+@*                         </button> *@
+@*                         <button onclick="openDeleteConfirmation('@post.Id')" title="Delete"> *@
+@*                             <i class="far fa-trash-alt"></i> *@
+@*                         </button> *@
+@*                     } *@
+@*                 </div> *@
+@*             </div> *@
+@*         </div> *@
+@*     } *@
+@* </div> *@
+@* *@
+@* <button class="create-tweet-btn" onclick="location.href='@Url.Action("Create")'"> *@
+@*     <i class="fas fa-plus"></i> *@
+@* </button> *@
+@* *@
+@* <!-- Modal for Delete Confirmation --> *@
+@* <div class="modal fade" id="deleteConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true"> *@
+@*     <div class="modal-dialog" role="document"> *@
+@*         <div class="modal-content"> *@
+@*             <div class="modal-header"> *@
+@*                 <h5 class="modal-title" id="deleteConfirmationModalLabel">Delete Confirmation</h5> *@
+@*                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"> *@
+@*                     <span aria-hidden="true">&times;</span> *@
+@*                 </button> *@
+@*             </div> *@
+@*             <div class="modal-body"> *@
+@*                 Are you sure you want to delete this post? *@
+@*             </div> *@
+@*             <div class="modal-footer"> *@
+@*                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> *@
+@*                 <button type="button" class="btn btn-danger" id="confirmDeleteButton">Delete</button> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
+@* *@
+@* @section Scripts { *@
+@*     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> *@
+@*     <script> *@
+@*     // Function to handle post liking *@
+@*     function likePost(postId, button) { *@
+@*         $.ajax({ *@
+@*             url: '@Url.Action("LikePost", "Post")', *@
+@*             type: 'POST', *@
+@*             data: { postId: postId }, *@
+@*             success: function(response) { *@
+@*                 if (response.success) { *@
+@*                     button.find('.like-count').text(response.likeCount); *@
+@*                     // Optionally, change button appearance to indicate liked state *@
+@*                     button.toggleClass('btn-outline-primary btn-primary'); *@
+@*                 } else { *@
+@*                     alert(response.message); *@
+@*                 } *@
+@*             }, *@
+@*             error: function() { *@
+@*                 alert("An error occurred while processing your request."); *@
+@*             } *@
+@*         }); *@
+@*     } *@
+@* *@
+@*     // Call likePost function on button click *@
+@*     $('.like-button').click(function() { *@
+@*         var postId = $(this).data('post-id'); *@
+@*         likePost(postId, $(this)); *@
+@*     }); *@
+@* *@
+@*     // Function to handle post bookmarking *@
+@*     function bookmarkPost(postId) { *@
+@*         $.ajax({ *@
+@*             url: '@Url.Action("BookmarkPost", "Post")', *@
+@*             type: 'POST', *@
+@*             data: { postId: postId }, *@
+@*             success: function(response) { *@
+@*                 if (response.success) { *@
+@*                     alert(response.message); *@
+@*                 } else { *@
+@*                     alert("Error: " + response.message); *@
+@*                 } *@
+@*             }, *@
+@*             error: function() { *@
+@*                 alert("An error occurred while bookmarking the post."); *@
+@*             } *@
+@*         }); *@
+@*     } *@
+@* *@
+@*     // Call bookmarkPost function on button click *@
+@*     $('.bookmark-button').click(function() { *@
+@*         var postId = $(this).data('post-id'); *@
+@*         bookmarkPost(postId); *@
+@*     }); *@
+@* *@
+@*     function openDeleteConfirmation(postId) { *@
+@*         // Update form action with the correct post id *@
+@*         $('#confirmDeleteButton').attr('onclick', 'deletePost(' + postId + ')'); *@
+@* *@
+@*         // Show the modal *@
+@*         $('#deleteConfirmationModal').modal('show'); *@
+@*     } *@
+@* *@
+@*     // Function to handle deleting a post *@
+@*     function deletePost(postId) { *@
+@*         $.ajax({ *@
+@*             url: '@Url.Action("Delete", "Post")/' + postId, *@
+@*             type: 'POST', *@
+@*             dataType: 'json', *@
+@*             success: function(response) { *@
+@*                 if (response.success) { *@
+@*                     $('#post-' + postId).remove(); *@
+@*                     $('#deleteConfirmationModal').modal('hide'); *@
+@*                     alert(response.message); // Optional: show a success message *@
+@*                 } else { *@
+@*                     alert(response.message || "An error occurred while deleting the post."); *@
+@*                 } *@
+@*             }, *@
+@*             error: function(jqXHR, textStatus, errorThrown) { *@
+@*                 console.error("AJAX error:", textStatus, errorThrown); *@
+@*                 alert("An error occurred while deleting the post."); *@
+@*             } *@
+@*         }); *@
+@*     } *@
+@* *@
+@*     // Function to handle view count increment and redirection *@
+@*     function incrementAndRedirect(postId) { *@
+@*         $.ajax({ *@
+@*             url: '@Url.Action("IncrementViewCount", "Post")', *@
+@*             type: 'POST', *@
+@*             data: { id: postId }, *@
+@*             success: function(response) { *@
+@*                 window.location.href = '@Url.Action("Details", "Post")/' + postId; *@
+@*             }, *@
+@*             error: function() { *@
+@*                 console.log("An error occurred while incrementing the view count."); *@
+@*             } *@
+@*         }); *@
+@*     } *@
+@* *@
+@*     // Initialize Intersection Observer *@
+@*     const observer = new IntersectionObserver((entries, observer) => { *@
+@*         entries.forEach(entry => { *@
+@*             if (entry.isIntersecting) { *@
+@*                 const postId = entry.target.id.split('-')[1]; *@
+@*                 incrementViewCount(postId); *@
+@*                 observer.unobserve(entry.target); *@
+@*             } *@
+@*         }); *@
+@*     }, { threshold: 0.5 }); *@
+@* *@
+@*     // Observe each post element *@
+@*     document.querySelectorAll('.tweet-card').forEach(card => { *@
+@*         observer.observe(card); *@
+@*     }); *@
+@*     </script> *@
+@* } *@
+
+
+
+
 @using AlbBlogger1.Data
 @using AlbBlogger1.Repositories.Pagination
 @using Microsoft.AspNetCore.Identity
@@ -77,9 +337,11 @@
         <div class="card tweet-card" id="post-@post.Id">
             <div class="card-body">
                 <div class="tweet-header">
-                    <img src="https://via.placeholder.com/48" alt="User Avatar" class="user-avatar">
+                    <a href="@Url.Action("Details", "User", new { id = post.UserId })">
+                        <img src="https://via.placeholder.com/48" alt="User Avatar" class="user-avatar">
+                    </a>
                     <div>
-                        <span class="user-name">@post.User.UserName</span>
+                        <a href="@Url.Action("Details", "User", new { id = post.UserId })" class="user-name">@post.User.UserName</a>
                         <span class="tweet-timestamp">@post.PublishDate.ToString("MMM dd")</span>
                     </div>
                 </div>

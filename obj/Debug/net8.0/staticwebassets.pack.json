@@ -5,8 +5,8 @@
       "PackagePath": "staticwebassets/AlbBlogger1.bundle.scp.css"
     },
     {
-      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/UserProfileImages/42252a02-9136-4782-af43-fff0af0da2d1.png",
-      "PackagePath": "staticwebassets/UserProfileImages/42252a02-9136-4782-af43-fff0af0da2d1.png"
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/UserProfileImages/1947521e-5dd5-4027-90ee-1736967e4771.png",
+      "PackagePath": "staticwebassets/UserProfileImages/1947521e-5dd5-4027-90ee-1736967e4771.png"
     },
     {
       "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/css/site.css",
@@ -247,6 +247,26 @@
     {
       "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/lib/jquery/dist/jquery.min.map",
       "PackagePath": "staticwebassets/lib/jquery/dist/jquery.min.map"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/016e958a-2eea-4c54-ad39-55741e8044d3_AppBreweryWallpaper 3.png",
+      "PackagePath": "staticwebassets/uploads/profile-pictures/016e958a-2eea-4c54-ad39-55741e8044d3_AppBreweryWallpaper 3.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/2faca607-a63a-4278-9ef8-f9ebda11ad11_AppBreweryWallpaper 8.png",
+      "PackagePath": "staticwebassets/uploads/profile-pictures/2faca607-a63a-4278-9ef8-f9ebda11ad11_AppBreweryWallpaper 8.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/98a211d3-a7c2-49b2-bf29-1d1dcdb0cac2_AppBreweryWallpaper 3.png",
+      "PackagePath": "staticwebassets/uploads/profile-pictures/98a211d3-a7c2-49b2-bf29-1d1dcdb0cac2_AppBreweryWallpaper 3.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/a2f94900-9d31-4d54-b081-ec2726639e4c_AppBreweryWallpaper 3.png",
+      "PackagePath": "staticwebassets/uploads/profile-pictures/a2f94900-9d31-4d54-b081-ec2726639e4c_AppBreweryWallpaper 3.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/b28aea61-652a-4428-81be-54c7280b1248_AppBreweryWallpaper 3.png",
+      "PackagePath": "staticwebassets/uploads/profile-pictures/b28aea61-652a-4428-81be-54c7280b1248_AppBreweryWallpaper 3.png"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AlbBlogger1.Microsoft.AspNetCore.StaticWebAssets.props",

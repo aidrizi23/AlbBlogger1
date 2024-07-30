@@ -144,13 +144,13 @@ namespace AlbBlogger1.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "58f38a3c-fc39-4e8a-8ae2-e6dc987c5492",
+                            ConcurrencyStamp = "237edf3f-3741-4bc3-881e-0ef40d549040",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFISmAAJRrZv75kR18nBa53pD24nOjVEXnjoFQQnoRCyKEVL4ZPi654t8UKRsTl/Pw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMVNU9YfQybILnPwejR5EoHaV9jJm6AA9EydDDYPq8yBaKoAnvtJjmZFAzxsVySbPg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -211,7 +211,6 @@ namespace AlbBlogger1.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -292,11 +291,10 @@ namespace AlbBlogger1.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("PostId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -436,8 +434,7 @@ namespace AlbBlogger1.Migrations
                     b.HasOne("AlbBlogger1.Data.ApplicationUser", "User")
                         .WithMany("Likes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Post");
 
@@ -464,14 +461,11 @@ namespace AlbBlogger1.Migrations
                     b.HasOne("AlbBlogger1.Data.Post", "Post")
                         .WithMany("Replies")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("AlbBlogger1.Data.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Post");
 

@@ -118,13 +118,13 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
                     EmailConfirmed = true,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    CustomUserName = $"{model.FirstName}_{model.LastName}"
-                    
+                    CustomUserName = $"{model.FirstName}_{model.LastName}",
+                    ProfilePicture = model.ProfilePicture.ToString()
                 };
 
                 if (model.ProfilePicture != null && model.ProfilePicture.Length > 0)
                 {
-                    var fileName = await UploadProfilePicture(model.ProfilePicture, user.Id);
+                    var fileName = await SaveProfilePictureAsync(model.ProfilePicture);
                     user.ProfilePicture = fileName;
                 }
             
@@ -155,30 +155,51 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
             return View(model);
         }
         
-        private async Task<string> UploadProfilePicture(IFormFile file, string userId)
+        // private async Task<string> UploadProfilePicture(IFormFile file, string userId)
+        // {
+        //     var uploadDir = _configuration["ProfilePictures:ProfilePictures"];
+        //     var uploads = Path.Combine(_webHostEnvironment.WebRootPath, uploadDir);
+        //
+        //     Directory.CreateDirectory(uploads);
+        //
+        //     var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        //     var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+        //
+        //     if (string.IsNullOrEmpty(fileExtension) || !allowedExtensions.Contains(fileExtension))
+        //     {
+        //         throw new InvalidOperationException("Invalid file type. Only jpg, jpeg, png, and gif are allowed.");
+        //     }
+        //
+        //     var fileName = $"{userId}{fileExtension}";
+        //     var filePath = Path.Combine(uploads, fileName);
+        //
+        //     using (var stream = new FileStream(filePath, FileMode.Create))
+        //     {
+        //         await file.CopyToAsync(stream);
+        //     }
+        //
+        //     return fileName;
+        // }
+        
+        
+        private async Task<string> SaveProfilePictureAsync(IFormFile file)
         {
-            var uploadDir = _configuration["ProfilePictures:ProfilePictures"];
-            var uploads = Path.Combine(_webHostEnvironment.WebRootPath, uploadDir);
+            if (file == null || file.Length == 0)
+                return null;
 
-            Directory.CreateDirectory(uploads);
+            var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "profile-pictures");
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
 
-            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
-            if (string.IsNullOrEmpty(fileExtension) || !allowedExtensions.Contains(fileExtension))
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
             {
-                throw new InvalidOperationException("Invalid file type. Only jpg, jpeg, png, and gif are allowed.");
+                await file.CopyToAsync(fileStream);
             }
 
-            var fileName = $"{userId}{fileExtension}";
-            var filePath = Path.Combine(uploads, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            return fileName;
+            return "/uploads/profile-pictures/" + uniqueFileName;
         }
         
         // method to get the liked posts of an user
