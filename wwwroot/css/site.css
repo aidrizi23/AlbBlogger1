@@ -65,3 +65,23 @@ body {
 .tweet-actions button {
   margin-right: 10px;
 }
+
+body {
+  padding-top: 60px;
+}
+
+.navbar-brand {
+  font-weight: bold;
+}
+
+.nav-item {
+  margin-right: 10px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  white-space: nowrap;
+  line-height: 60px;
+}
