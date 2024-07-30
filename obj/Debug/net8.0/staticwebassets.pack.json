@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets/AlbBlogger1.bundle.scp.css"
     },
     {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/UserProfileImages/42252a02-9136-4782-af43-fff0af0da2d1.png",
+      "PackagePath": "staticwebassets/UserProfileImages/42252a02-9136-4782-af43-fff0af0da2d1.png"
+    },
+    {
       "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
     },

@@ -7,6 +7,8 @@ namespace NestAlbania.Services.Extensions
     public class FileHandlerService : IFileHandlerService
     {
         private readonly Microsoft.AspNetCore.Hosting.IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
         private readonly List<string> _permittedExtensions = new List<string> { ".pdf", ".jpg", ".jpeg", ".png", ".gif" };
         private readonly Dictionary<string, string> _mimeTypes = new Dictionary<string, string>
         {
@@ -101,6 +103,37 @@ namespace NestAlbania.Services.Extensions
                     File.Delete(fileDel);
                 }
             }
+        }
+        
+        
+        
+        
+        public async Task<string> UploadProfilePictureAsync(IFormFile file, string userId)
+        {
+            if (file == null || file.Length == 0)
+                return null;
+
+            var uploadDir = _configuration["ProfilePictures:ProfilePictures"];
+            var uploads = Path.Combine(_hostingEnvironment.WebRootPath, uploadDir);
+
+            // Ensure the directory exists
+            Directory.CreateDirectory(uploads);
+
+            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (string.IsNullOrEmpty(fileExtension) || !_permittedExtensions.Contains(fileExtension))
+            {
+                throw new InvalidOperationException("Invalid file type.");
+            }
+
+            var fileName = $"{userId}{fileExtension}";
+            var filePath = Path.Combine(uploads, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return fileName;
         }
     }
 }

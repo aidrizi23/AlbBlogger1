@@ -18,18 +18,25 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IUserRoleService _userRoleService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
         private readonly ILikeService _likeService;
 
-        public AccountController(UserManager<ApplicationUser> userManager, 
-                                SignInManager<ApplicationUser> signInManager, 
-                                ILogger<AccountController> logger,
-                                IUserRoleService userRoleService,
-                                ILikeService likeService)
+        public AccountController(
+            ILikeService likeService,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager,
+            ILogger<AccountController> logger,
+            IUserRoleService userRoleService,
+            IWebHostEnvironment webHostEnvironment,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _userRoleService = userRoleService;
+            _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
             _likeService = likeService;
         }
 
@@ -99,30 +106,37 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            
-            
+    
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    Id = Guid.NewGuid().ToString(), // Ensure Id is set
+                    Id = Guid.NewGuid().ToString(),
                     LockoutEnabled = false,
                     EmailConfirmed = true,
-                };
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    CustomUserName = $"{model.FirstName}_{model.LastName}"
                     
+                };
+
+                if (model.ProfilePicture != null && model.ProfilePicture.Length > 0)
+                {
+                    var fileName = await UploadProfilePicture(model.ProfilePicture, user.Id);
+                    user.ProfilePicture = fileName;
+                }
+            
                 var result = await _userManager.CreateAsync(user, model.Password);
-                
-                
-                // TEK KJO METODE, DO TE BEJME QE TE KENE TE GJITHE KETA ROLIN NORMAL USER
+        
                 var userRole = new ApplicationUserRole()
                 {
                     RoleId = "a14bs9c0-aa65-4af8-bd17-00bd9344e575",
                     UserId = user.Id
                 };
-                await _userRoleService.CreateAsync(userRole); // krijojme automatikisht user role
-                
+                await _userRoleService.CreateAsync(userRole);
+        
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
@@ -130,7 +144,7 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
 
-                   return RedirectToAction("Index", "Home"); // Redirect to returnUrl or default homepage
+                    return RedirectToAction("Index", "Home");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -138,8 +152,33 @@ using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pag
                 }
             }
 
-            // If model state is not valid or registration fails, return to register view with errors
             return View(model);
+        }
+        
+        private async Task<string> UploadProfilePicture(IFormFile file, string userId)
+        {
+            var uploadDir = _configuration["ProfilePictures:ProfilePictures"];
+            var uploads = Path.Combine(_webHostEnvironment.WebRootPath, uploadDir);
+
+            Directory.CreateDirectory(uploads);
+
+            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+
+            if (string.IsNullOrEmpty(fileExtension) || !allowedExtensions.Contains(fileExtension))
+            {
+                throw new InvalidOperationException("Invalid file type. Only jpg, jpeg, png, and gif are allowed.");
+            }
+
+            var fileName = $"{userId}{fileExtension}";
+            var filePath = Path.Combine(uploads, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return fileName;
         }
         
         // method to get the liked posts of an user

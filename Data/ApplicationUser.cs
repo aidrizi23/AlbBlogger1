@@ -12,4 +12,10 @@ public class ApplicationUser : IdentityUser<string>
     public ICollection<Like> Likes { get; set; }
     
     
+    
+    public string? ProfilePicture { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? CustomUserName { get; set; } 
+    
 }

@@ -22,5 +22,9 @@ namespace AlbBlogger1.Models
 
         [Required]
         public string LastName { get; set; }
+        
+        
+        [Display(Name = "Profile Picture")]
+        public IFormFile ProfilePicture { get; set; }
     }
 }

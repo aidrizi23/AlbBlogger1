@@ -24,6 +24,8 @@
       <Folder Include="Migrations\" />
       <Folder Include="Views\Account\" />
       <Folder Include="Views\Post\" />
+      <Folder Include="Views\User\" />
+      <Folder Include="wwwroot\UserProfileImages\" />
     </ItemGroup>
 
     <ItemGroup>
