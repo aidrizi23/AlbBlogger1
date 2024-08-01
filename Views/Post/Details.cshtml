@@ -24,10 +24,10 @@
                 <div class="tweet-content mt-3">
                     <h5>@Model.Post.Title</h5>
                     <p>@Model.Post.Content</p>
-                    @if (!string.IsNullOrEmpty(Model.Post.Image))
-                    {
-                        <img src="@Model.Post.Image" alt="Tweet Image" class="img-fluid mt-2">
-                    }
+                    @* @if (!string.IsNullOrEmpty(Model.Post.Image)) *@
+                    @* { *@
+                    @*     <img src="@Model.Post.Image" alt="Tweet Image" class="img-fluid mt-2"> *@
+                    @* } *@
                 </div>
                 <div class="tweet-stats mt-3">
                     <span title="Views"><i class="far fa-eye"></i> @Model.Post.Views</span>

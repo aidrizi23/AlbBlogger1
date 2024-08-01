@@ -21,8 +21,7 @@ public class PostViewModel
 
     public int Views { get; set; }
 
-    public string Image { get; set; }
-
+    public List<string>? Images { get; set; }
     // Additional properties or methods as needed
 
     public string UserId { get; set; }  // Example: If you need to display user-related information

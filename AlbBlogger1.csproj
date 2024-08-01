@@ -25,6 +25,8 @@
       <Folder Include="Views\Account\" />
       <Folder Include="Views\Post\" />
       <Folder Include="Views\User\" />
+      <Folder Include="wwwroot\uploads\postImages\" />
+      <Folder Include="wwwroot\uploads\profile-pictures\" />
       <Folder Include="wwwroot\UserProfileImages\" />
     </ItemGroup>
 

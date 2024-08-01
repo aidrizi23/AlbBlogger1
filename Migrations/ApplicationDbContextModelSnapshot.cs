@@ -144,13 +144,13 @@ namespace AlbBlogger1.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "237edf3f-3741-4bc3-881e-0ef40d549040",
+                            ConcurrencyStamp = "4db068e5-a1a9-43b2-aa3b-466f356296ed",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMVNU9YfQybILnPwejR5EoHaV9jJm6AA9EydDDYPq8yBaKoAnvtJjmZFAzxsVySbPg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJNVCsHqrOe4SJ4thbid8XR//SOPIzZaUi5P1plK7ZanDkiecBv/V6lA4dKHN61rIg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -240,8 +240,7 @@ namespace AlbBlogger1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
+                    b.Property<string>("Images")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastEdited")

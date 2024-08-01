@@ -11,7 +11,7 @@
 <hr />
 <div class="row justify-content-center">
     <div class="col-md-6">
-        <form asp-action="Create">
+        <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
             
             <div class="form-group">
@@ -32,11 +32,20 @@
                 <span asp-validation-for="Tags" class="text-danger"></span>
             </div>
             
-            <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" placeholder="Add an image URL" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div>
+            @* <div class="form-group"> *@
+            @*     <label asp-for="Image" class="control-label"></label> *@
+            @*     <input asp-for="Image" class="form-control" placeholder="Add an image URL" /> *@
+            @*     <span asp-validation-for="Image" class="text-danger"></span> *@
+            @* </div> *@
+
+                <div class="form-group">
+                    <label asp-for="Images" class="control-label">
+                        <i class="fas fa-images"></i> @Html.DisplayNameFor(m => m.Images)
+                    </label>
+                    <input type="file" id="ImagesInput" asp-for="Images" name="Images" accept="image/*" multiple class="form-control-file" />
+                    <span asp-validation-for="Images" class="text-danger"></span>
+                </div>
+            
          
             <div class="form-group">
                 <input type="submit" value="Tweet" class="btn btn-primary btn-block tweet-button" />

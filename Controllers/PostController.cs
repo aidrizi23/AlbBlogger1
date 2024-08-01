@@ -6,6 +6,7 @@ using AlbBlogger1.Repositories.Pagination;
 using AlbBlogger1.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NestAlbania.Services.Extensions;
 
 namespace AlbBlogger1.Controllers;
 
@@ -17,9 +18,10 @@ public class PostController : Controller
     private readonly IBookmarkService _bookmarkService;
     private readonly ILikeService _likeService;
     private readonly IReplyService _replyService; // Add this line
+    public readonly IFileHandlerService _fileHandleService;
 
     public PostController(IPostService postService, IUserService userService, UserManager<ApplicationUser> userManager, 
-        IBookmarkService bookmarkService, ILikeService likeService, IReplyService replyService) // Add replyService parameter
+        IBookmarkService bookmarkService, ILikeService likeService, IReplyService replyService, IFileHandlerService fileHandleService) // Add replyService parameter
     {
         _postService = postService;
         _userService = userService;
@@ -27,6 +29,7 @@ public class PostController : Controller
         _bookmarkService = bookmarkService;
         _likeService = likeService;
         _replyService = replyService; // Add this line
+        _fileHandleService = fileHandleService;
     }
 
     public async Task<IActionResult> Index(int pageIndex = 1)
@@ -121,14 +124,30 @@ public class PostController : Controller
                     PublishDate = DateTime.Now,
                     Tags = viewModel.Tags,
                     Views = 0,
-                    Image = viewModel.Image,
+                    // Image = viewModel.Image,
+                    Images = new List<string>(),
                     UserId = userId,
                     User = user,
                     LikeCount = 0,
                 };
 
                 await _postService.CreatePostAsync(post);
+                
+                var otherFiles = HttpContext.Request.Form.Files.Where(f => f.Name.StartsWith("Images")).ToList();
+                if (otherFiles.Count > 0)
+                {
+                    var uploadDir = "uploads/postImages";
+                    var fileCollection = new FormFileCollection();
+                    foreach (var file in otherFiles)
+                    {
+                        fileCollection.Add(file);
+                    }
+                    var fileNames = await _fileHandleService.UploadAsync(fileCollection, uploadDir);
+                    post.Images.AddRange(fileNames);
+                    await _postService.EditPostAsync(post); 
+                }
             }
+           
         }
         return RedirectToAction("Index");
     }

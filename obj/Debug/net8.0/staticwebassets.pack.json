@@ -249,24 +249,56 @@
       "PackagePath": "staticwebassets/lib/jquery/dist/jquery.min.map"
     },
     {
-      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/016e958a-2eea-4c54-ad39-55741e8044d3_AppBreweryWallpaper 3.png",
-      "PackagePath": "staticwebassets/uploads/profile-pictures/016e958a-2eea-4c54-ad39-55741e8044d3_AppBreweryWallpaper 3.png"
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/CV Albi Idrizi_639e1c4d_71908039.pdf",
+      "PackagePath": "staticwebassets/uploads/postImages/CV Albi Idrizi_639e1c4d_71908039.pdf"
     },
     {
-      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/2faca607-a63a-4278-9ef8-f9ebda11ad11_AppBreweryWallpaper 8.png",
-      "PackagePath": "staticwebassets/uploads/profile-pictures/2faca607-a63a-4278-9ef8-f9ebda11ad11_AppBreweryWallpaper 8.png"
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-23 00-50-40_3aed13a0.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-23 00-50-40_3aed13a0.png"
     },
     {
-      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/98a211d3-a7c2-49b2-bf29-1d1dcdb0cac2_AppBreweryWallpaper 3.png",
-      "PackagePath": "staticwebassets/uploads/profile-pictures/98a211d3-a7c2-49b2-bf29-1d1dcdb0cac2_AppBreweryWallpaper 3.png"
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-23 00-50-40_660512d1.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-23 00-50-40_660512d1.png"
     },
     {
-      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/a2f94900-9d31-4d54-b081-ec2726639e4c_AppBreweryWallpaper 3.png",
-      "PackagePath": "staticwebassets/uploads/profile-pictures/a2f94900-9d31-4d54-b081-ec2726639e4c_AppBreweryWallpaper 3.png"
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-23 00-50-40_6d606297.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-23 00-50-40_6d606297.png"
     },
     {
-      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/b28aea61-652a-4428-81be-54c7280b1248_AppBreweryWallpaper 3.png",
-      "PackagePath": "staticwebassets/uploads/profile-pictures/b28aea61-652a-4428-81be-54c7280b1248_AppBreweryWallpaper 3.png"
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-23 00-50-40_7d75b2b0.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-23 00-50-40_7d75b2b0.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-23 00-50-40_b21cc110.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-23 00-50-40_b21cc110.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-25 21-57-55_76317867.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-25 21-57-55_76317867.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-25 21-57-55_922a271c.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-25 21-57-55_922a271c.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-25 21-57-55_ad8e2ed7.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-25 21-57-55_ad8e2ed7.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/Screenshot from 2024-07-25 21-57-55_ed361640.png",
+      "PackagePath": "staticwebassets/uploads/postImages/Screenshot from 2024-07-25 21-57-55_ed361640.png"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/image3_15d64852.jpg",
+      "PackagePath": "staticwebassets/uploads/postImages/image3_15d64852.jpg"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/postImages/image3_fae60b19.jpg",
+      "PackagePath": "staticwebassets/uploads/postImages/image3_fae60b19.jpg"
+    },
+    {
+      "Id": "/home/user1/RiderProjects/AlbBlogger1/wwwroot/uploads/profile-pictures/b2415be7-f55f-4b2b-b951-272028005e1b_image3.jpg",
+      "PackagePath": "staticwebassets/uploads/profile-pictures/b2415be7-f55f-4b2b-b951-272028005e1b_image3.jpg"
     },
     {
       "Id": "obj/Debug/net8.0/staticwebassets/msbuild.AlbBlogger1.Microsoft.AspNetCore.StaticWebAssets.props",

@@ -18,11 +18,13 @@ public class Post : BaseEntity
  
     public int Views { get; set; }
     public int Clicks { get; set; }
-    public string Image { get; set; }
+    // public string Image { get; set; }
     
     [ForeignKey("UserId")]
     public string UserId { get; set; }
     public ApplicationUser User;
+    
+    public List<string>? Images { get; set; }
     
     
     public ICollection<Reply> Replies { get; set; }
