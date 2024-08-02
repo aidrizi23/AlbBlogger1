@@ -90,7 +90,12 @@ public class PostController : Controller
         {
             return Json(new { success = false, message = "Post not found" });
         }
-    
+
+        var images = post.Images;
+        foreach (var image in images)
+        {
+            _fileHandleService.RemoveImageFile("uploads/postImages", image);
+        }
         await _postService.DeletePostAsync(post);
     
         if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
