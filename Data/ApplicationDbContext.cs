@@ -197,7 +197,7 @@ namespace AlbBlogger1.Data
         public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
         public DbSet<Bookmark> Bookmarks { get; set; }
         public DbSet<Like> Likes { get; set; }
-        public DbSet<Reply> Replies { get; set; }
+        public DbSet<Reply?> Replies { get; set; }
         
     }
 }

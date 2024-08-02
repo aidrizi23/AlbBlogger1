@@ -12,9 +12,9 @@ public class ReplyService : IReplyService
         _replyRepository = repository;
     }
 
-    public async Task<Reply> GetReplyByIdAsync(int id)
+    public async Task<Reply?> GetReplyByIdAsync(int id)
     {
-        return await _replyRepository.GetById(id);
+        return await _replyRepository.GetReplyByIdAsync(id);
     }
 
     public async Task CreatReplyAsync(Reply reply)
@@ -25,11 +25,17 @@ public class ReplyService : IReplyService
     {
         return await _replyRepository.GetRepliesByPostIdAsync(postId);
     }
+
+    public async Task EditReplyAsync(Reply reply)
+    {
+        await _replyRepository.Edit(reply);
+    }
 }
 
 public interface IReplyService
 {
     Task<IEnumerable<Reply>> GetRepliesByPostIdAsync(int postId);
     Task CreatReplyAsync(Reply reply);
-    Task<Reply> GetReplyByIdAsync(int id);
+    Task<Reply?> GetReplyByIdAsync(int id);
+    Task EditReplyAsync(Reply reply);
 }

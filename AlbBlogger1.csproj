@@ -33,6 +33,7 @@
     <ItemGroup>
       <Compile Remove="Migrations\**" />
       <Compile Remove="Migrations2\**" />
+      <Compile Remove="Controllers\ReplyController.cs" />
     </ItemGroup>
 
     <ItemGroup>

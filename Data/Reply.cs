@@ -9,4 +9,9 @@ public class Reply
     public ApplicationUser? User { get; set; }
     public int? PostId { get; set; }
     public Post? Post { get; set; }
+    
+    
+    public int? ParentReplyId { get; set; }
+    public Reply? ParentReply { get; set; }
+    public List<Reply> ChildReplies { get; set; } = new List<Reply>();
 }

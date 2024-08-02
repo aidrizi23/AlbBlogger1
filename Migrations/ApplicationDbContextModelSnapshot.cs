@@ -144,13 +144,13 @@ namespace AlbBlogger1.Migrations
                         {
                             Id = "a18be9c0-aa65-4af8-bd17-00bd9344e575",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4db068e5-a1a9-43b2-aa3b-466f356296ed",
+                            ConcurrencyStamp = "968d31e6-8863-485d-8004-d626e471ed3a",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJNVCsHqrOe4SJ4thbid8XR//SOPIzZaUi5P1plK7ZanDkiecBv/V6lA4dKHN61rIg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGMvrs55P6YAlFLH4ustL1F6CI4bJJAO9z4EifNt5V2GA0m6tbnWSsejs+/zZvrLrw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -290,6 +290,9 @@ namespace AlbBlogger1.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("ParentReplyId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
 
@@ -297,6 +300,8 @@ namespace AlbBlogger1.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentReplyId");
 
                     b.HasIndex("PostId");
 
@@ -457,6 +462,10 @@ namespace AlbBlogger1.Migrations
 
             modelBuilder.Entity("AlbBlogger1.Data.Reply", b =>
                 {
+                    b.HasOne("AlbBlogger1.Data.Reply", "ParentReply")
+                        .WithMany("ChildReplies")
+                        .HasForeignKey("ParentReplyId");
+
                     b.HasOne("AlbBlogger1.Data.Post", "Post")
                         .WithMany("Replies")
                         .HasForeignKey("PostId")
@@ -465,6 +474,8 @@ namespace AlbBlogger1.Migrations
                     b.HasOne("AlbBlogger1.Data.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("ParentReply");
 
                     b.Navigation("Post");
 
@@ -526,6 +537,11 @@ namespace AlbBlogger1.Migrations
                     b.Navigation("Likes");
 
                     b.Navigation("Replies");
+                });
+
+            modelBuilder.Entity("AlbBlogger1.Data.Reply", b =>
+                {
+                    b.Navigation("ChildReplies");
                 });
 #pragma warning restore 612, 618
         }

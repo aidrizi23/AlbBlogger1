@@ -1,0 +1,203 @@
+@* $1$ $2$ @using Microsoft.AspNetCore.Mvc.TagHelpers #2# #1# *@
+@* $1$ $2$ @model List<AlbBlogger1.Data.Reply> #2# #1# *@
+@* $1$ $2$ #2# #1# *@
+@* $1$ $2$ @foreach (var reply in Model) #2# #1# *@
+@* $1$ $2$ { #2# #1# *@
+@* $1$ $2$     <div class="card tweet-card mt-2"> #2# #1# *@
+@* $1$ $2$         <div class="card-body"> #2# #1# *@
+@* $1$ $2$             <div class="tweet-header"> #2# #1# *@
+@* $1$ $2$                 <img src="https://via.placeholder.com/32" alt="User Avatar" class="user-avatar-small"> #2# #1# *@
+@* $1$ $2$                 <div> #2# #1# *@
+@* $1$ $2$                     <span class="user-name">@reply.User?.UserName</span> #2# #1# *@
+@* $1$ $2$                     <span class="tweet-timestamp">@reply.CreatedAt.ToString("MMM dd")</span> #2# #1# *@
+@* $1$ $2$                 </div> #2# #1# *@
+@* $1$ $2$             </div> #2# #1# *@
+@* $1$ $2$             <div class="tweet-content mt-2"> #2# #1# *@
+@* $1$ $2$                 <p>@reply.Content</p> #2# #1# *@
+@* $1$ $2$             </div> #2# #1# *@
+@* $1$ $2$             <div class="mt-2"> #2# #1# *@
+@* $1$ $2$                 <button class="btn btn-sm btn-outline-primary" onclick="toggleReplyForm(@reply.Id)">Reply</button> #2# #1# *@
+@* $1$ $2$                 <div id="replyForm@(reply.Id)" style="display: none;" class="mt-2"> #2# #1# *@
+@* $1$ $2$                     @if (User.Identity.IsAuthenticated) #2# #1# *@
+@* $1$ $2$                     { #2# #1# *@
+@* $1$ $2$                         <form asp-action="CreateReplyForReply" asp-route-parentReplyId="@reply.Id" asp-route-postId="@reply.PostId" method="post"> #2# #1# *@
+@* $1$ $2$                             <div class="form-group"> #2# #1# *@
+@* $1$ $2$                                 <textarea name="content" class="form-control" rows="2" required placeholder="Write your reply..."></textarea> #2# #1# *@
+@* $1$ $2$                             </div> #2# #1# *@
+@* $1$ $2$                             <button type="submit" class="btn btn-sm btn-primary">Submit Reply</button> #2# #1# *@
+@* $1$ $2$                         </form> #2# #1# *@
+@* $1$ $2$                     } #2# #1# *@
+@* $1$ $2$                     else #2# #1# *@
+@* $1$ $2$                     { #2# #1# *@
+@* $1$ $2$                         <p>Please <a asp-area="Identity" asp-page="/Account/Login">log in</a> to reply.</p> #2# #1# *@
+@* $1$ $2$                     } #2# #1# *@
+@* $1$ $2$                 </div> #2# #1# *@
+@* $1$ $2$             </div> #2# #1# *@
+@* $1$ $2$             @if (reply.ChildReplies != null && reply.ChildReplies.Any()) #2# #1# *@
+@* $1$ $2$             { #2# #1# *@
+@* $1$ $2$                 <div class="ml-4 mt-2"> #2# #1# *@
+@* $1$ $2$                     @await Html.PartialAsync("_RepliesPartial", reply.ChildReplies.OrderByDescending(r => r.CreatedAt).ToList()) #2# #1# *@
+@* $1$ $2$                 </div> #2# #1# *@
+@* $1$ $2$             } #2# #1# *@
+@* $1$ $2$         </div> #2# #1# *@
+@* $1$ $2$     </div> #2# #1# *@
+@* $1$ $2$ } #2# #1# *@
+@* $1$ #1# *@
+@* $1$ #1# *@
+@* $1$ #1# *@
+@* $1$ @using Microsoft.AspNetCore.Mvc.TagHelpers #1# *@
+@* $1$ @model List<AlbBlogger1.Data.Reply> #1# *@
+@* $1$ #1# *@
+@* $1$ @foreach (var reply in Model) #1# *@
+@* $1$ { #1# *@
+@* $1$     <div class="card tweet-card mt-2"> #1# *@
+@* $1$         <div class="card-body"> #1# *@
+@* $1$             <div class="tweet-header"> #1# *@
+@* $1$                 <img src="https://via.placeholder.com/32" alt="User Avatar" class="user-avatar-small"> #1# *@
+@* $1$                 <div> #1# *@
+@* $1$                     <span class="user-name">@reply.User?.UserName</span> #1# *@
+@* $1$                     <span class="tweet-timestamp">@reply.CreatedAt.ToString("MMM dd")</span> #1# *@
+@* $1$                 </div> #1# *@
+@* $1$             </div> #1# *@
+@* $1$             <div class="tweet-content mt-2"> #1# *@
+@* $1$                 <p>@reply.Content</p> #1# *@
+@* $1$             </div> #1# *@
+@* $1$             <div class="mt-2"> #1# *@
+@* $1$                 <button class="btn btn-sm btn-outline-primary" onclick="toggleReplyForm(@reply.Id)">Reply</button> #1# *@
+@* $1$                 @if (reply.ChildReplies != null && reply.ChildReplies.Any()) #1# *@
+@* $1$                 { #1# *@
+@* $1$                     <button class="btn btn-sm btn-outline-secondary ml-2" onclick="toggleChildReplies(@reply.Id)"> #1# *@
+@* $1$                         Show Replies (<span id="childReplyCount-@reply.Id">@reply.ChildReplies.Count</span>) #1# *@
+@* $1$                     </button> #1# *@
+@* $1$                 } #1# *@
+@* $1$                 <div id="replyForm@(reply.Id)" style="display: none;" class="mt-2"> #1# *@
+@* $1$                     @if (User.Identity.IsAuthenticated) #1# *@
+@* $1$                     { #1# *@
+@* $1$                         <form asp-action="CreateReplyForReply" asp-route-parentReplyId="@reply.Id" asp-route-postId="@reply.PostId" method="post"> #1# *@
+@* $1$                             <div class="form-group"> #1# *@
+@* $1$                                 <textarea name="content" class="form-control" rows="2" required placeholder="Write your reply..."></textarea> #1# *@
+@* $1$                             </div> #1# *@
+@* $1$                             <button type="submit" class="btn btn-sm btn-primary">Submit Reply</button> #1# *@
+@* $1$                         </form> #1# *@
+@* $1$                     } #1# *@
+@* $1$                     else #1# *@
+@* $1$                     { #1# *@
+@* $1$                         <p>Please <a asp-area="Identity" asp-page="/Account/Login">log in</a> to reply.</p> #1# *@
+@* $1$                     } #1# *@
+@* $1$                 </div> #1# *@
+@* $1$             </div> #1# *@
+@* $1$             @if (reply.ChildReplies != null && reply.ChildReplies.Any()) #1# *@
+@* $1$             { #1# *@
+@* $1$                 <div id="childReplies-@reply.Id" class="ml-4 mt-2" style="display: none;"> #1# *@
+@* $1$                     @await Html.PartialAsync("_RepliesPartial", reply.ChildReplies.OrderByDescending(r => r.CreatedAt).ToList()) #1# *@
+@* $1$                 </div> #1# *@
+@* $1$             } #1# *@
+@* $1$         </div> #1# *@
+@* $1$     </div> #1# *@
+@* $1$ } #1# *@
+@* *@
+@* *@
+@* @using Microsoft.AspNetCore.Mvc.TagHelpers *@
+@* @model List<AlbBlogger1.Data.Reply> *@
+@* *@
+@* @foreach (var reply in Model) *@
+@* { *@
+@*     <div class="tweet-card mt-2" id="reply-@reply.Id"> *@
+@*         <div class="tweet-content"> *@
+@*             <div class="tweet-header"> *@
+@*                 <img src="https://via.placeholder.com/32" alt="User Avatar" class="user-avatar-small"> *@
+@*                 <div> *@
+@*                     <span class="user-name">@reply.User?.UserName</span> *@
+@*                     <span class="tweet-timestamp">@reply.CreatedAt.ToString("MMM dd")</span> *@
+@*                 </div> *@
+@*             </div> *@
+@*             <p>@reply.Content</p> *@
+@*         </div> *@
+@*         <div class="tweet-actions"> *@
+@*             <button class="btn btn-sm btn-link" onclick="toggleReplyForm(@reply.Id)"> *@
+@*                 <i class="far fa-comment"></i> Reply *@
+@*             </button> *@
+@*             @if (reply.ChildReplies != null && reply.ChildReplies.Any()) *@
+@*             { *@
+@*                 <button class="btn btn-sm btn-link" onclick="toggleChildReplies(@reply.Id)"> *@
+@*                     <i class="fas fa-chevron-down"></i> Show Replies (<span id="childReplyCount-@reply.Id">@reply.ChildReplies.Count</span>) *@
+@*                 </button> *@
+@*             } *@
+@*         </div> *@
+@*         <div id="replyForm@(reply.Id)" style="display: none;" class="mt-2"> *@
+@*             @if (User.Identity.IsAuthenticated) *@
+@*             { *@
+@*                 <form onsubmit="submitReply(event, @reply.Id, @reply.PostId)"> *@
+@*                     <div class="form-group"> *@
+@*                         <textarea name="content" class="form-control" rows="2" required placeholder="Write your reply..."></textarea> *@
+@*                     </div> *@
+@*                     <button type="submit" class="btn btn-sm btn-primary">Submit Reply</button> *@
+@*                 </form> *@
+@*             } *@
+@*             else *@
+@*             { *@
+@*                 <p>Please <a asp-area="Identity" asp-page="/Account/Login">log in</a> to reply.</p> *@
+@*             } *@
+@*         </div> *@
+@*         @if (reply.ChildReplies != null && reply.ChildReplies.Any()) *@
+@*         { *@
+@*             <div id="childReplies-@reply.Id" class="ml-4 mt-2" style="display: none;"> *@
+@*                 @await Html.PartialAsync("_RepliesPartial", reply.ChildReplies.OrderByDescending(r => r.CreatedAt).ToList()) *@
+@*             </div> *@
+@*         } *@
+@*     </div> *@
+@* } *@
+
+
+
+
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<AlbBlogger1.Data.Reply>
+
+@foreach (var reply in Model)
+{
+    <div class="tweet-card mt-2" id="reply-@reply.Id">
+        <div class="tweet-content">
+            <div class="tweet-header">
+                <img src="https://via.placeholder.com/32" alt="User Avatar" class="user-avatar-small">
+                <div>
+                    <span class="user-name">@reply.User?.UserName</span>
+                    <span class="tweet-timestamp">@reply.CreatedAt.ToString("MMM dd")</span>
+                </div>
+            </div>
+            <p>@reply.Content</p>
+        </div>
+        <div class="tweet-actions">
+            <button class="btn btn-sm btn-link" onclick="toggleReplyForm(@reply.Id)">
+                <i class="far fa-comment"></i> Reply
+            </button>
+            @if (reply.ChildReplies != null && reply.ChildReplies.Any())
+            {
+                <button class="btn btn-sm btn-link" onclick="toggleChildReplies(@reply.Id)">
+                    <i class="fas fa-chevron-down"></i> Show Replies (<span id="childReplyCount-@reply.Id">@reply.ChildReplies.Count</span>)
+                </button>
+            }
+        </div>
+        <div id="replyForm@(reply.Id)" style="display: none;" class="mt-2">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form onsubmit="submitReply(event, @reply.Id, @reply.PostId)">
+                    <div class="form-group">
+                        <textarea name="content" class="form-control" rows="2" required placeholder="Write your reply..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary">Submit Reply</button>
+                </form>
+            }
+            else
+            {
+                <p>Please <a asp-area="Identity" asp-page="/Account/Login">log in</a> to reply.</p>
+            }
+        </div>
+        @if (reply.ChildReplies != null && reply.ChildReplies.Any())
+        {
+            <div id="childReplies-@reply.Id" class="ml-4 mt-2" style="display: none;">
+                @await Html.PartialAsync("_RepliesPartial", reply.ChildReplies.OrderByDescending(r => r.CreatedAt).ToList())
+            </div>
+        }
+    </div>
+}

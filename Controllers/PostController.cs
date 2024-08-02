@@ -82,6 +82,58 @@ public class PostController : Controller
         return RedirectToAction(nameof(Details), new { id = postId });
     }
     
+    // [HttpPost]
+    // public async Task<IActionResult> CreateReplyForReply(int parentReplyId, int postId, string content)
+    // {
+    //     var user = await _userManager.GetUserAsync(User);
+    //     if (user == null)
+    //     {
+    //         return Unauthorized();
+    //     }
+    //
+    //     var reply = new Reply
+    //     {
+    //         Content = content,
+    //         CreatedAt = DateTime.UtcNow,
+    //         UserId = user.Id,
+    //         PostId = postId,
+    //         ParentReplyId = parentReplyId
+    //     };
+    //
+    //     await _replyService.CreatReplyAsync(reply);
+    //
+    //     return RedirectToAction("Details", new { id = postId });
+    // }
+    
+    [HttpPost]
+    public async Task<IActionResult> CreateReplyForReply(int parentReplyId, int postId, string content)
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return Json(new { success = false, message = "User not authenticated." });
+        }
+
+        var reply = new Reply
+        {
+            Content = content,
+            CreatedAt = DateTime.UtcNow,
+            UserId = user.Id,
+            PostId = postId,
+            ParentReplyId = parentReplyId
+        };
+
+        await _replyService.CreatReplyAsync(reply);
+
+        return Json(new { 
+            success = true, 
+            replyId = reply.Id,
+            userName = user.UserName,
+            content = reply.Content
+        });
+    }
+    
+    
     [HttpPost, HttpGet]
     public async Task<IActionResult> Delete(int id)
     {

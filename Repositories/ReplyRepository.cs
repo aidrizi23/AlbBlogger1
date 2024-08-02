@@ -22,4 +22,12 @@ public class ReplyRepository : BaseRepository<Reply>
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync();
     }
+    
+    public async Task<Reply?> GetReplyByIdAsync(int replyId)
+    {
+        return await _context.Replies
+            .Include(r => r.ChildReplies)
+            .FirstOrDefaultAsync(r => r.Id == replyId);
+    }
+    
 }
