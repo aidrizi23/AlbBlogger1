@@ -106,6 +106,8 @@ public class PostController : Controller
     // }
     
     [HttpPost]
+    [ValidateAntiForgeryToken]
+
     public async Task<IActionResult> CreateReplyForReply(int parentReplyId, int postId, string content)
     {
         var user = await _userManager.GetUserAsync(User);
